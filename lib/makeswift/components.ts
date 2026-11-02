@@ -1,4 +1,5 @@
 import './components/accordion/register';
+import './components/ggg-storefront/register';
 import './components/button-link/register';
 import './components/card/register';
 import './components/card-carousel/register';

@@ -128,7 +128,25 @@ A CI job that only lints, typechecks, or runs unit tests needs no credentials, b
 committed files. If you would rather have CI verify that they are current, run `pnpm run generate`
 there and fail the job when `git diff --exit-code` reports a change.
 
-## Resources
+## Give Girls Guns storefront
+
+The storefront uses the supplied artwork in `public/ggg` and a lavender, teal, and purple theme. The homepage, `/shop`, `/our-story`, and `/get-in-touch` use registered Makeswift sections. The launch apparel collection is ordered **449, 448, 396** in `lib/ggg-storefront.ts`. Names, images, prices, product options, and purchasing continue to use the BigCommerce catalog and Catalyst product/cart flows. The supplied products are Atlanta Arms apparel; the site does not rename them as Give Girls Guns merchandise.
+
+### Editing in Makeswift
+
+Run `pnpm run dev` and connect the existing Makeswift site's Host URL to the development server (or to a deployment containing these changes). Open the relevant URL in the visual builder. In its Elements panel, select the sections labeled **3G · …** to edit copy, artwork, image descriptions, and supported links. Missing artwork selections use the supplied artwork automatically. Empty button destinations use the site's apparel/story routes.
+
+The new components also appear under **3G** in the component tray. Each page has an **Add … sections** slot: enable visual editing on that slot, then drag registered sections into it. The initial core section order is maintained in the page files; the slots allow additional sections without code changes. These pages render embedded component snapshots rather than the former Makeswift homepage page snapshot. Previously published homepage layouts are not deleted, but are no longer rendered at `/`.
+
+Header/announcement, newsletter, footer, and values use shared component snapshot IDs, so editing one instance updates it everywhere. The homepage collection and shop collection have separate headings. Publish the component changes through Makeswift; deploying the code alone does not publish editor changes. Product data stays editable in BigCommerce rather than being copied into Makeswift.
+
+The newsletter uses Catalyst's existing BigCommerce subscription action. Contact details come from the channel's store settings. When the channel has a BigCommerce **Contact Page**, the contact route automatically uses the existing validated contact form and reCAPTCHA integration. Until then, it displays working email and phone links; no message is submitted by those links. The Instagram link is hidden until a real profile URL is entered in the footer controls.
+
+### Local validation
+
+Use `pnpm exec next typegen` and `pnpm run typecheck` for route/type checks. Preview `/`, `/shop`, `/our-story`, and `/get-in-touch` at desktop and mobile sizes. Verify the three product links, sizing, bag navigation, newsletter validation, and the mobile menu. The `ggg/` artwork directory is excluded from the storefront routing proxy so images are served as static assets.
+
+## Catalyst resources
 
 - [Catalyst Documentation](https://catalyst.dev/docs/)
 - [GraphQL Storefront API Playground](https://developer.bigcommerce.com/graphql-storefront/playground)

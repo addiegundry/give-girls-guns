@@ -1,0 +1,68 @@
+'use client';
+
+import { createContext, ReactNode, useContext } from 'react';
+
+import { Product } from '@/vibes/soul/primitives/product-card';
+import { ApparelCollection, BrandContact } from '@/vibes/soul/sections/ggg-storefront';
+import { useProducts } from '~/lib/makeswift/utils/use-products';
+import { APPAREL_PRODUCT_IDS } from '~/lib/ggg-storefront';
+
+const APPAREL_IDS = APPAREL_PRODUCT_IDS.map(String);
+
+const CatalogContext = createContext<Product[] | null>(null);
+const ContactContext = createContext<ReactNode>(null);
+
+export function ApparelProvider({
+  products,
+  children,
+}: {
+  products: Product[];
+  children: ReactNode;
+}) {
+  return <CatalogContext.Provider value={products}>{children}</CatalogContext.Provider>;
+}
+
+export function ContactFormProvider({ form, children }: { form: ReactNode; children: ReactNode }) {
+  return <ContactContext.Provider value={form}>{children}</ContactContext.Provider>;
+}
+
+export function MSApparelCollection(props: {
+  className?: string;
+  title?: string;
+  description?: string;
+  eyebrow?: string;
+  showAllLink?: boolean;
+}) {
+  const initialProducts = useContext(CatalogContext);
+  const { products, isLoading } = useProducts({
+    collection: 'none',
+    additionalProductIds: initialProducts === null ? APPAREL_IDS : [],
+  });
+
+  return (
+    <ApparelCollection
+      {...props}
+      loading={initialProducts === null && isLoading}
+      products={initialProducts ?? products ?? []}
+    />
+  );
+}
+
+export function MSBrandContact(props: {
+  className?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+}) {
+  return <BrandContact {...props}>{useContext(ContactContext)}</BrandContact>;
+}
+
+export function BrandExtraSections({
+  children,
+  className,
+}: {
+  children?: ReactNode;
+  className?: string;
+}) {
+  return <div className={className}>{children}</div>;
+}

@@ -32,15 +32,15 @@ export const button = Group({
     fontFamily: FontFamily({ label: 'Font', defaultValue: FontFamily.Body }),
     primary: colorGroup('Primary', {
       background: hsl(colors.primary),
-      backgroundHover: hsl(colors.primaryMix.white[75]),
-      foreground: hsl(colors.foreground),
+      backgroundHover: hsl(colors.primaryMix.black[75]),
+      foreground: hsl(colors.background),
       border: hsl(colors.primary),
     }),
     secondary: colorGroup('Secondary', {
-      background: hsl(colors.foreground),
+      background: hsl(colors.accent),
       backgroundHover: hsl(colors.background),
-      foreground: hsl(colors.background),
-      border: hsl(colors.foreground),
+      foreground: hsl(colors.foreground),
+      border: hsl(colors.accent),
     }),
     tertiary: colorGroup('Tertiary', {
       background: hsl(colors.background),

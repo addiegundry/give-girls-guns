@@ -1,8 +1,9 @@
 import { setRequestLocale } from 'next-intl/server';
 import { PropsWithChildren } from 'react';
 
-import { Footer } from '~/components/footer';
-import { Header } from '~/components/header';
+import '@/vibes/soul/sections/ggg-storefront/styles.css';
+
+import { BrandSection } from '~/components/ggg-storefront';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ locale: string }>;
@@ -14,12 +15,15 @@ export default async function DefaultLayout({ params, children }: Props) {
   setRequestLocale(locale);
 
   return (
-    <>
-      <Header />
+    <div className="ggg-storefront">
+      <BrandSection label="3G · Header and announcement" name="header" />
 
-      <main>{children}</main>
+      <main className="ggg-main-content" id="main-content">
+        {children}
+      </main>
 
-      <Footer />
-    </>
+      <BrandSection label="3G · Newsletter" name="newsletter" />
+      <BrandSection label="3G · Footer" name="footer" />
+    </div>
   );
 }

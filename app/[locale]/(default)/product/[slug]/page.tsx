@@ -8,11 +8,13 @@ import { Stream, Streamable } from '@/vibes/soul/lib/streamable';
 import { FeaturedProductCarousel } from '@/vibes/soul/sections/featured-product-carousel';
 import { ProductVideos } from '@/vibes/soul/sections/product-detail/product-videos';
 import { auth, getSessionCustomerAccessToken } from '~/auth';
+import { getProductsByIds } from '~/client/queries/get-products';
 import { rewriteWysiwygContentUrls } from '~/data-transformers/html-content-transformer';
 import { pricesTransformer } from '~/data-transformers/prices-transformer';
 import { productCardTransformer } from '~/data-transformers/product-card-transformer';
 import { productOptionsTransformer } from '~/data-transformers/product-options-transformer';
 import { getPreferredCurrencyCode } from '~/lib/currency';
+import { APPAREL_PRODUCT_IDS } from '~/lib/ggg-storefront';
 import { getMakeswiftPageMetadata } from '~/lib/makeswift';
 import { ProductDetail } from '~/lib/makeswift/components/product-detail';
 import { getRecaptchaSiteKey } from '~/lib/recaptcha';
@@ -509,6 +511,21 @@ export default async function Product({ params, searchParams }: Props) {
   });
 
   const streameableRelatedProducts = Streamable.from(async () => {
+    if (APPAREL_PRODUCT_IDS.some((id) => id === productId)) {
+      const result = await getProductsByIds({
+        entityIds: APPAREL_PRODUCT_IDS.filter((id) => id !== productId),
+        locale,
+      });
+
+      return productCardTransformer(
+        result.products ?? [],
+        format,
+        undefined,
+        undefined,
+        taxDisplay,
+      );
+    }
+
     const product = await streamableProductPricingAndRelatedProducts;
 
     if (!product) {
@@ -628,7 +645,10 @@ export default async function Product({ params, searchParams }: Props) {
       </Stream>
 
       <FeaturedProductCarousel
-        cta={{ label: t('RelatedProducts.cta'), href: '/shop-all' }}
+        cta={{
+          label: t('RelatedProducts.cta'),
+          href: APPAREL_PRODUCT_IDS.some((id) => id === productId) ? '/shop' : '/shop-all',
+        }}
         emptyStateSubtitle={t('RelatedProducts.browseCatalog')}
         emptyStateTitle={t('RelatedProducts.noRelatedProducts')}
         nextLabel={t('RelatedProducts.nextProducts')}

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 
-import { getMakeswiftPageMetadata, Page as MakeswiftPage } from '~/lib/makeswift';
+import { ApparelData, BrandSection } from '~/components/ggg-storefront';
+import { getMakeswiftPageMetadata } from '~/lib/makeswift';
 import { getMetadataAlternates } from '~/lib/seo/canonical';
 
 interface Params {
@@ -16,8 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metadata = await getMakeswiftPageMetadata({ path: '/', locale });
 
   return {
-    ...(metadata?.title != null && { title: metadata.title }),
-    ...(metadata?.description != null && { description: metadata.description }),
+    title: metadata?.title ?? 'Give Girls Guns | Wear your confidence',
+    description:
+      metadata?.description ??
+      'Everyday apparel for independent spirits. Discover the collection and meet the Give Girls Guns community.',
     alternates: await getMetadataAlternates({ path: '/', locale }),
   };
 }
@@ -28,5 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Home({ params }: Props) {
   const { locale } = await params;
 
-  return <MakeswiftPage locale={locale} path="/" />;
+  return (
+    <ApparelData locale={locale}>
+      <BrandSection label="3G · Homepage hero" name="hero" />
+      <BrandSection label="3G · Statement strip" name="marquee" />
+      <BrandSection label="3G · Featured apparel" name="apparel" />
+      <BrandSection label="3G · Our community" name="story" />
+      <BrandSection label="3G · Our values" name="values" />
+      <BrandSection label="3G · Add homepage sections" name="extra" />
+    </ApparelData>
+  );
 }

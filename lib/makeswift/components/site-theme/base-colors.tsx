@@ -1,10 +1,10 @@
 import { themeToCssVars } from './to-css';
 
 export const colors = {
-  primary: '96 100% 68%',
-  accent: '96 100% 88%',
-  background: '0 0% 100%',
-  foreground: '0 0% 7%',
+  primary: '178 49% 25%',
+  accent: '278 50% 88%',
+  background: '276 60% 98%',
+  foreground: '178 49% 20%',
   success: '116 78% 65%',
   error: '0 100% 60%',
   warning: '40 100% 60%',
@@ -18,10 +18,10 @@ export const colors = {
   },
   primaryMix: {
     white: {
-      75: '98.2 100% 93%',
+      75: '178 20% 94%',
     },
     black: {
-      75: '97.24, 74.36%, 7.65%',
+      75: '178 49% 18%',
     },
   },
 };

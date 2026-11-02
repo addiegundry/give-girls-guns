@@ -32,8 +32,9 @@ export const config = {
      * - sitemap.xml (sitemap route)
      * - xmlsitemap.php (legacy sitemap route)
      * - robots.txt (robots route)
+     * - ggg/ (local storefront artwork)
      */
-    '/((?!api|admin|_next/static|_next/image|_vercel|favicon.ico|xmlsitemap.php|sitemap.xml|robots.txt).*)',
+    '/((?!api|admin|_next/static|_next/image|_vercel|favicon.ico|xmlsitemap.php|sitemap.xml|robots.txt|ggg/).*)',
     /*
      * UCP endpoints, proxied to the store's canonical domain by `withUcpProxy`. Declared
      * separately so the `api` exclusion above keeps applying to every other API route.
