@@ -3,11 +3,15 @@ import { AnonymousUser } from 'next-auth';
 import { decode, encode } from 'next-auth/jwt';
 
 const anonymousCookieName = 'authjs.anonymous-session-token';
+const secureAnonymousCookieName = `__Secure-${anonymousCookieName}`;
 
 const shouldUseSecureCookie = async () => {
   const headersList = await headers();
 
-  return headersList.get('x-forwarded-proto') === 'https';
+  return (
+    headersList.get('x-forwarded-proto') === 'https' ||
+    (await cookies()).has(secureAnonymousCookieName)
+  );
 };
 
 export const anonymousSignIn = async (user: Partial<AnonymousUser> = { cartId: null }) => {
@@ -29,6 +33,7 @@ export const anonymousSignIn = async (user: Partial<AnonymousUser> = { cartId: n
   });
 
   cookieJar.set(`${cookiePrefix}${anonymousCookieName}`, jwt, {
+    path: '/',
     secure: useSecureCookies,
     sameSite: 'lax',
     httpOnly: true,
@@ -37,9 +42,9 @@ export const anonymousSignIn = async (user: Partial<AnonymousUser> = { cartId: n
 
 export const getAnonymousSession = async () => {
   const cookieJar = await cookies();
-  const useSecureCookies = await shouldUseSecureCookie();
-  const cookiePrefix = useSecureCookies ? '__Secure-' : '';
-  const jwt = cookieJar.get(`${cookiePrefix}${anonymousCookieName}`);
+  // Hosting proxies can expose different protocol headers to the proxy and server actions.
+  // Read the cookie that exists, preferring the secure session after an HTTPS update.
+  const jwt = cookieJar.get(secureAnonymousCookieName) ?? cookieJar.get(anonymousCookieName);
 
   if (!jwt) {
     return null;
@@ -54,7 +59,7 @@ export const getAnonymousSession = async () => {
   try {
     const session = await decode({
       secret,
-      salt: `${cookiePrefix}${anonymousCookieName}`,
+      salt: jwt.name,
       token: jwt.value,
     });
 
@@ -69,14 +74,15 @@ export const getAnonymousSession = async () => {
 
 export const clearAnonymousSession = async () => {
   const cookieJar = await cookies();
-  const useSecureCookies = await shouldUseSecureCookie();
-  const cookiePrefix = useSecureCookies ? '__Secure-' : '';
 
-  cookieJar.delete({
-    name: `${cookiePrefix}${anonymousCookieName}`,
-    secure: useSecureCookies,
-    sameSite: 'lax',
-    httpOnly: true,
+  [secureAnonymousCookieName, anonymousCookieName].forEach((name) => {
+    cookieJar.delete({
+      name,
+      path: '/',
+      secure: name === secureAnonymousCookieName,
+      sameSite: 'lax',
+      httpOnly: true,
+    });
   });
 };
 
