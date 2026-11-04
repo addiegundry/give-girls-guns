@@ -1,104 +1,225 @@
 'use client';
 
-import { ArrowDown, ArrowRight, Heart, Menu, ShoppingBag, UserRound, X } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { ArrowRight, Menu, ShoppingBag, X } from 'lucide-react';
+import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 
-import { InlineEmailForm } from '@/vibes/soul/primitives/inline-email-form';
 import { PriceLabel } from '@/vibes/soul/primitives/price-label';
 import { Product } from '@/vibes/soul/primitives/product-card';
 import { Image } from '~/components/image';
 import { Link } from '~/components/link';
-import { subscribe } from '~/components/subscribe/_actions/subscribe';
+import { useRouter } from '~/i18n/routing';
 
 export const brandDefaults = {
-  heroTitle: 'Be fearless.\nBe yourself.',
-  heroDescription:
-    'A little boldness looks good on you. Meet everyday apparel with a whole lot of attitude.',
+  heroTitle: 'Your next\nrange day\nstarts here.',
+  heroDescription: 'Meet the Give Girls Guns ammo lineup.',
+  bannerFirst: 'FIND YOUR CALIBER',
+  bannerSecond: 'MAKE IT A RANGE DAY',
+  bannerThird: 'CONFIDENCE IN EVERY ROUND',
+  bannerFourth: 'GIVE GIRLS GUNS',
   storyTitle: 'More than a look.\nA whole movement.',
   storyDescription:
     'Give Girls Guns is a community built on confidence, individuality, and showing up for one another. We believe women deserve to take up space, write their own stories, and feel at home being themselves.',
 };
 
 type EditableProps = { className?: string };
+type EditableLink = { href: string; target?: string };
+type NavigationItem = { label?: string; link?: EditableLink };
+
+function linkDestination(link: EditableLink | undefined, fallback: string) {
+  const href = link?.href?.trim();
+
+  return href && href !== '#' ? href : fallback;
+}
 
 export function BrandHeader({
   brand = 'Give Girls Guns',
-  announcement = 'A little attitude. A lot of confidence. Welcome to the club.',
-  shopLabel = 'Shop apparel',
-  storyLabel = 'Our story',
-  contactLabel = 'Get in touch',
+  shopLabel = 'Shop the Collection',
+  storyLabel = 'About',
+  contactLabel = 'Contact',
+  shopLink,
+  storyLink,
+  contactLink,
+  additionalLinks = [],
+  logo,
+  logoLink,
+  cropLogo = true,
+  searchLabel = 'Search the collection',
+  searchPlaceholder = 'What are you looking for?',
   className,
 }: EditableProps & {
   brand?: string;
-  announcement?: string;
   shopLabel?: string;
   storyLabel?: string;
   contactLabel?: string;
+  shopLink?: EditableLink;
+  storyLink?: EditableLink;
+  contactLink?: EditableLink;
+  additionalLinks?: NavigationItem[];
+  logo?: string;
+  logoLink?: EditableLink;
+  cropLogo?: boolean;
+  searchLabel?: string;
+  searchPlaceholder?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const menuId = useId();
+  const searchId = useId();
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const searchButton = useRef<HTMLButtonElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const links = [
+    { href: linkDestination(shopLink, '/shop'), target: shopLink?.target, label: shopLabel },
+    {
+      href: linkDestination(storyLink, '/our-story'),
+      target: storyLink?.target,
+      label: storyLabel,
+    },
+    {
+      href: linkDestination(contactLink, '/get-in-touch'),
+      target: contactLink?.target,
+      label: contactLabel,
+    },
+    ...additionalLinks.map(({ label, link }) => ({
+      href: linkDestination(link, '/shop'),
+      target: link?.target,
+      label,
+    })),
+  ];
+
+  useEffect(() => {
+    if (searchOpen) searchInput.current?.focus();
+  }, [searchOpen]);
 
   return (
-    <header className={`ggg-header ${className ?? ''}`}>
+    <header
+      className={`ggg-landing-header ${className ?? ''}`}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          if (searchOpen) searchButton.current?.focus();
+          else if (open) menuButton.current?.focus();
+          setSearchOpen(false);
+          setOpen(false);
+        }
+      }}
+    >
       <a className="ggg-skip" href="#main-content">
         Skip to content
       </a>
-      {showAnnouncement && announcement && (
-        <div className="ggg-announcement">
-          <span>{announcement}</span>
-          <button
-            aria-label="Dismiss announcement"
-            onClick={() => setShowAnnouncement(false)}
-            type="button"
-          >
-            <X size={15} />
-          </button>
-        </div>
-      )}
-      <div className="ggg-nav ggg-container">
-        <Link aria-label={`${brand} home`} className="ggg-wordmark" href="/">
-          {brand}
-          <span className="ggg-wordmark-dot">✳</span>
+      <div className="ggg-landing-nav">
+        <Link
+          aria-label={`${brand} home`}
+          className={`ggg-landing-logo ${cropLogo ? 'ggg-landing-logo-cropped' : ''}`}
+          href={linkDestination(logoLink, '/')}
+          onClick={() => {
+            setOpen(false);
+            setSearchOpen(false);
+          }}
+          target={logoLink?.target}
+        >
+          <Image
+            alt=""
+            height={1000}
+            sizes="(max-width: 700px) 125px, 15vw"
+            preload
+            src={logo || '/ggg/landing/logo-main.png'}
+            width={1000}
+          />
         </Link>
-        <nav aria-label="Main navigation" className="ggg-desktop-nav">
-          <Link href="/shop">{shopLabel}</Link>
-          <Link href="/our-story">{storyLabel}</Link>
-          <Link href="/get-in-touch">{contactLabel}</Link>
-        </nav>
-        <div className="ggg-nav-actions">
-          <Link aria-label="Your account" className="ggg-icon-link" href="/login">
-            <UserRound size={21} strokeWidth={1.5} />
-          </Link>
-          <Link aria-label="Shopping bag" className="ggg-bag" href="/cart">
-            <ShoppingBag size={21} strokeWidth={1.5} />
-            <span>Bag</span>
-          </Link>
-          <button
-            aria-controls="ggg-mobile-nav"
-            aria-expanded={open}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            className="ggg-menu-toggle"
-            onClick={() => setOpen(!open)}
-            type="button"
-          >
-            {open ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-      {open && (
-        <nav aria-label="Mobile navigation" className="ggg-mobile-nav" id="ggg-mobile-nav">
-          {[
-            ['/shop', shopLabel],
-            ['/our-story', storyLabel],
-            ['/get-in-touch', contactLabel],
-          ].map(([href, label]) => (
-            <Link href={href ?? '/'} key={href} onClick={() => setOpen(false)}>
+        <nav aria-label="Main navigation" className="ggg-landing-desktop-nav">
+          {links.map(({ href, target, label }) => (
+            <Link href={href} key={`${href}-${label}`} target={target}>
               {label}
-              <ArrowRight size={18} />
             </Link>
           ))}
         </nav>
-      )}
+        <div className="ggg-landing-nav-actions">
+          <button
+            aria-controls={searchId}
+            aria-expanded={searchOpen}
+            aria-label={searchOpen ? 'Close search' : 'Search products'}
+            className="ggg-landing-icon"
+            onClick={() => {
+              setSearchOpen(!searchOpen);
+              setOpen(false);
+            }}
+            ref={searchButton}
+            type="button"
+          >
+            {searchOpen ? (
+              <X aria-hidden="true" />
+            ) : (
+              <Image alt="" height={30} src="/ggg/landing/icon-search.svg" width={30} />
+            )}
+          </button>
+          <Link
+            aria-label="Shopping bag"
+            className="ggg-landing-icon"
+            href="/cart"
+            onClick={() => {
+              setOpen(false);
+              setSearchOpen(false);
+            }}
+          >
+            <Image alt="" height={30} src="/ggg/landing/icon-bag.svg" width={30} />
+          </Link>
+          <button
+            aria-controls={menuId}
+            aria-expanded={open}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            className="ggg-landing-icon ggg-landing-menu-toggle"
+            onClick={() => {
+              setOpen(!open);
+              setSearchOpen(false);
+            }}
+            ref={menuButton}
+            type="button"
+          >
+            {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
+      </div>
+      <nav
+        aria-label="Mobile navigation"
+        className="ggg-landing-mobile-nav"
+        hidden={!open}
+        id={menuId}
+      >
+        {links.map(({ href, target, label }) => (
+          <Link href={href} key={`${href}-${label}`} onClick={() => setOpen(false)} target={target}>
+            {label}
+            <ArrowRight aria-hidden="true" size={18} />
+          </Link>
+        ))}
+      </nav>
+      <div className="ggg-landing-search" hidden={!searchOpen} id={searchId}>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const term = searchInput.current?.value.trim();
+
+            if (term) {
+              setSearchOpen(false);
+              router.push(`/search?term=${encodeURIComponent(term)}`);
+            }
+          }}
+          role="search"
+        >
+          <label htmlFor={`${searchId}-input`}>{searchLabel}</label>
+          <div className="ggg-landing-search-field">
+            <input
+              id={`${searchId}-input`}
+              name="term"
+              placeholder={searchPlaceholder}
+              ref={searchInput}
+              required
+              type="search"
+            />
+            <button type="submit">Search</button>
+          </div>
+        </form>
+      </div>
     </header>
   );
 }
@@ -106,93 +227,142 @@ export function BrandHeader({
 export function BrandHero({
   title = brandDefaults.heroTitle,
   description = brandDefaults.heroDescription,
-  eyebrow = 'For women who take up space',
   image,
-  imageAlt = 'A colorful illustrated lineup of confident women',
-  buttonText = 'Find your everyday bold',
+  imageAlt = 'Specialty Cartridge ammunition displayed on lavender podiums',
+  buttonText = 'Shop Ammo',
   buttonLink,
-  secondaryText = 'Meet the community',
-  secondaryLink,
+  mobileImage,
+  sealImage,
+  topCornerImage,
+  bottomCornerImage,
+  showSeal = true,
+  showCorners = true,
   className,
 }: EditableProps & {
   title?: string;
   description?: string;
-  eyebrow?: string;
   image?: string;
   imageAlt?: string;
   buttonText?: string;
-  buttonLink?: { href: string; target?: string };
-  secondaryText?: string;
-  secondaryLink?: { href: string; target?: string };
+  buttonLink?: EditableLink;
+  mobileImage?: string;
+  sealImage?: string;
+  topCornerImage?: string;
+  bottomCornerImage?: string;
+  showSeal?: boolean;
+  showCorners?: boolean;
 }) {
+  const headingId = useId();
+
   return (
-    <section className={`ggg-hero ggg-container ${className ?? ''}`}>
-      <div className="ggg-hero-copy">
-        <p className="ggg-eyebrow">
-          <span />
-          {eyebrow}
-        </p>
-        <h1>{title}</h1>
-        <p className="ggg-hero-description">{description}</p>
+    <section aria-labelledby={headingId} className={`ggg-landing-hero ${className ?? ''}`}>
+      <div className={`ggg-landing-hero-art ${mobileImage ? 'ggg-landing-has-mobile-art' : ''}`}>
+        {mobileImage && (
+          <Image
+            alt={imageAlt}
+            className="ggg-landing-mobile-art"
+            fill
+            sizes="100vw"
+            src={mobileImage}
+          />
+        )}
+        <Image
+          className="ggg-landing-desktop-art"
+          alt={imageAlt}
+          fill
+          preload
+          sizes="(max-width: 700px) 160vw, 100vw"
+          src={image || '/ggg/landing/hero-background.png'}
+        />
+        {showSeal && (
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="ggg-landing-hero-seal"
+            height={1200}
+            sizes="(max-width: 700px) 110px, 18vw"
+            src={sealImage || '/ggg/landing/seal-purple-with-shadow.png'}
+            width={1200}
+          />
+        )}
+      </div>
+      {showCorners && (
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="ggg-landing-hero-corner ggg-landing-hero-corner-top"
+          height={160}
+          src={topCornerImage || '/ggg/landing/hero-corner-top-left.svg'}
+          width={400}
+        />
+      )}
+      <div className="ggg-landing-hero-copy">
+        <h1 id={headingId}>{title}</h1>
+        <p>{description}</p>
         <Link
-          className="ggg-button"
+          className="ggg-landing-hero-button"
           href={buttonLink?.href && buttonLink.href !== '#' ? buttonLink.href : '/shop'}
           target={buttonLink?.target}
         >
           {buttonText}
-          <ArrowRight size={19} />
         </Link>
-        <Link
-          className="ggg-text-link"
-          href={
-            secondaryLink?.href && secondaryLink.href !== '#' ? secondaryLink.href : '/our-story'
-          }
-          target={secondaryLink?.target}
-        >
-          {secondaryText}
-          <ArrowRight size={16} />
-        </Link>
-        <div className="ggg-hero-footnote">
-          <span>Independent spirits. Shared purpose.</span>
-          <ArrowDown size={17} />
-        </div>
       </div>
-      <div className="ggg-hero-art">
+      {showCorners && (
         <Image
-          alt={imageAlt}
-          className="ggg-cover"
-          fill
-          preload
-          sizes="(min-width: 900px) 62vw, 100vw"
-          src={image || '/ggg/GGG-hero.webp'}
+          alt=""
+          aria-hidden="true"
+          className="ggg-landing-hero-corner ggg-landing-hero-corner-bottom"
+          height={160}
+          src={bottomCornerImage || '/ggg/landing/hero-corner-bottom-right.svg'}
+          width={400}
         />
-        <div className="ggg-sticker" aria-hidden="true">
-          A little
-          <br />
-          <em>fearless.</em>
-          <span>100% YOU ✳</span>
-        </div>
-        <span className="ggg-art-caption">THE GIVE GIRLS GUNS COLLECTIVE / 01</span>
-      </div>
+      )}
     </section>
   );
 }
 
 export function BrandMarquee({
-  text = 'Confidence looks good on everyone',
+  text = brandDefaults.bannerFirst,
+  secondText = brandDefaults.bannerSecond,
+  thirdText = brandDefaults.bannerThird,
+  fourthText = brandDefaults.bannerFourth,
   className,
-}: EditableProps & { text?: string }) {
+}: EditableProps & {
+  text?: string;
+  secondText?: string;
+  thirdText?: string;
+  fourthText?: string;
+}) {
+  const statements = [
+    { id: 'first', text },
+    { id: 'second', text: secondText },
+    { id: 'third', text: thirdText },
+    { id: 'fourth', text: fourthText },
+  ];
+
   return (
-    <div className={`ggg-marquee ${className ?? ''}`}>
-      <span>✳</span>
-      <p>{text}</p>
-      <span>✳</span>
-      <p className="ggg-marquee-repeat" aria-hidden="true">
-        Wear your own kind of bold
-      </p>
-      <span className="ggg-marquee-repeat" aria-hidden="true">
-        ✳
-      </span>
+    <div
+      aria-label="Give Girls Guns statements"
+      className={`ggg-marquee ${className ?? ''}`}
+      role="region"
+      tabIndex={0}
+    >
+      <ul>
+        {statements.map((statement, index) => (
+          <li key={statement.id}>
+            {index > 0 && (
+              <Image
+                alt=""
+                aria-hidden="true"
+                height={20}
+                src="/ggg/landing/divider-flower-pink.svg"
+                width={20}
+              />
+            )}
+            <span>{statement.text}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -391,86 +561,7 @@ export function BrandValues({
   );
 }
 
-export function BrandNewsletter({
-  title = 'You’re our kind of people.',
-  description = 'New arrivals, fresh ideas, and a little community in your inbox. Be part of what’s next.',
-  eyebrow = 'Good company. Great inbox.',
-  privacyText = 'Only the good stuff. Unsubscribe whenever you like.',
-  className,
-}: EditableProps & {
-  title?: string;
-  description?: string;
-  eyebrow?: string;
-  privacyText?: string;
-}) {
-  return (
-    <section className={`ggg-newsletter ${className ?? ''}`}>
-      <div className="ggg-container ggg-newsletter-inner">
-        <div>
-          <p className="ggg-eyebrow">{eyebrow}</p>
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
-        <div className="ggg-newsletter-form">
-          <p id="ggg-newsletter-label">Join the list</p>
-          <div aria-labelledby="ggg-newsletter-label" role="group">
-            <InlineEmailForm
-              action={subscribe}
-              placeholder="Your email address"
-              submitLabel="Join the newsletter"
-            />
-          </div>
-          <small>{privacyText}</small>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function BrandFooter({
-  brand = 'Give Girls Guns',
-  tagline = 'For the bold. For the individual. For each other.',
-  artNote = 'Original spirit. AI-assisted illustrations.',
-  instagramUrl,
-  className,
-}: EditableProps & { brand?: string; tagline?: string; artNote?: string; instagramUrl?: string }) {
-  return (
-    <footer className={`ggg-footer ${className ?? ''}`}>
-      <div className="ggg-container">
-        <div className="ggg-footer-top">
-          <div>
-            <Link className="ggg-wordmark" href="/">
-              {brand}
-              <span className="ggg-wordmark-dot">✳</span>
-            </Link>
-            <p>{tagline}</p>
-          </div>
-          <nav aria-label="Footer navigation">
-            <Link href="/shop">Shop apparel</Link>
-            <Link href="/our-story">Our story</Link>
-            <Link href="/get-in-touch">Get in touch</Link>
-            <Link href="/account/orders">Your orders</Link>
-            {instagramUrl && (
-              <a href={instagramUrl} rel="noopener noreferrer" target="_blank">
-                Instagram ↗
-              </a>
-            )}
-          </nav>
-        </div>
-        <div className="ggg-footer-bottom">
-          <span>
-            © {new Date().getFullYear()} {brand}
-          </span>
-          <span>{artNote}</span>
-          <span>
-            Wear your confidence.
-            <Heart aria-hidden="true" size={13} />
-          </span>
-        </div>
-      </div>
-    </footer>
-  );
-}
+export { BrandNewsletter, BrandFooter, RangeDayFeature } from './landing-closing';
 
 export function BrandPageIntro({
   title = 'Wear your confidence.',

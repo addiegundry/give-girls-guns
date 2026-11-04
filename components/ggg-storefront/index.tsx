@@ -4,10 +4,10 @@ import { ReactNode } from 'react';
 
 import { getProductsByIds } from '~/client/queries/get-products';
 import { productCardTransformer } from '~/data-transformers/product-card-transformer';
-import { APPAREL_PRODUCT_IDS } from '~/lib/ggg-storefront';
+import { APPAREL_PRODUCT_IDS, DEFAULT_LINEUP_PRODUCTS } from '~/lib/ggg-storefront';
 import { Component } from '~/lib/makeswift/component';
 import { getComponentSnapshot } from '~/lib/makeswift/client';
-import { ApparelProvider } from '~/lib/makeswift/components/ggg-storefront/client';
+import { ApparelProvider, LineupProvider } from '~/lib/makeswift/components/ggg-storefront/client';
 
 export async function BrandSection({
   name,
@@ -45,5 +45,19 @@ export async function ApparelData({ locale, children }: { locale: string; childr
 
   return (
     <ApparelProvider products={productCardTransformer(ordered, format)}>{children}</ApparelProvider>
+  );
+}
+
+export async function LineupData({ locale, children }: { locale: string; children: ReactNode }) {
+  const ids = DEFAULT_LINEUP_PRODUCTS.map(({ entityId }) => Number(entityId));
+  const [result, format] = await Promise.all([
+    getProductsByIds({ entityIds: ids, locale }),
+    getFormatter(),
+  ]);
+
+  return (
+    <LineupProvider products={productCardTransformer(result.products ?? [], format)}>
+      {children}
+    </LineupProvider>
   );
 }

@@ -1,5 +1,8 @@
 import {
   Checkbox,
+  Combobox,
+  Group,
+  List,
   Image,
   Slot,
   Style,
@@ -15,6 +18,7 @@ import {
   BrandHero,
   BrandMarquee,
   BrandNewsletter,
+  RangeDayFeature,
   BrandPageIntro,
   BrandStory,
   BrandValues,
@@ -22,7 +26,13 @@ import {
 } from '@/vibes/soul/sections/ggg-storefront';
 import { runtime } from '~/lib/makeswift/runtime';
 
-import { BrandExtraSections, MSApparelCollection, MSBrandContact } from './client';
+import {
+  BrandExtraSections,
+  MSApparelCollection,
+  MSBrandContact,
+  MSRangeDayLineup,
+} from './client';
+import { searchProducts } from '../../utils/search-products';
 
 const style = () => Style();
 const text = (label: string, defaultValue: string) => TextInput({ label, defaultValue });
@@ -34,37 +44,97 @@ runtime.registerComponent(BrandHeader, {
   props: {
     className: style(),
     brand: text('Brand name', 'Give Girls Guns'),
-    announcement: text(
-      'Announcement',
-      'A little attitude. A lot of confidence. Welcome to the club.',
-    ),
-    shopLabel: text('Shop label', 'Shop apparel'),
-    storyLabel: text('Story label', 'Our story'),
-    contactLabel: text('Contact label', 'Get in touch'),
+    logo: Image({ label: 'Logo (uses brand artwork by default)' }),
+    logoLink: Link({ label: 'Logo destination (defaults to home)' }),
+    cropLogo: Checkbox({ label: 'Crop original logo canvas', defaultValue: true }),
+    shopLabel: text('Shop label', 'Shop the Collection'),
+    storyLabel: text('Story label', 'About'),
+    contactLabel: text('Contact label', 'Contact'),
+    shopLink: Link({ label: 'Collection destination (defaults to shop)' }),
+    storyLink: Link({ label: 'About destination (defaults to our story)' }),
+    contactLink: Link({ label: 'Contact destination (defaults to contact page)' }),
+    additionalLinks: List({
+      label: 'Additional navigation links',
+      type: Group({
+        label: 'Navigation link',
+        props: {
+          label: text('Label', 'Link'),
+          link: Link({ label: 'Destination' }),
+        },
+      }),
+      getItemLabel: (item) => item?.label || 'Navigation link',
+    }),
+    searchLabel: text('Search heading', 'Search the collection'),
+    searchPlaceholder: text('Search placeholder', 'What are you looking for?'),
   },
 });
 
 runtime.registerComponent(BrandHero, {
   type: 'ggg-hero',
-  label: '3G / Illustrated hero',
+  label: '3G / Landing hero',
   props: {
     className: style(),
-    eyebrow: text('Eyebrow', 'For women who take up space'),
     title: paragraph('Heading', brandDefaults.heroTitle),
     description: paragraph('Description', brandDefaults.heroDescription),
     image: Image({ label: 'Hero artwork (uses supplied artwork by default)' }),
-    imageAlt: text('Image description', 'A colorful illustrated lineup of confident women'),
-    buttonText: text('Primary button', 'Find your everyday bold'),
-    buttonLink: Link({ label: 'Primary destination (defaults to apparel)' }),
-    secondaryText: text('Secondary button', 'Meet the community'),
-    secondaryLink: Link({ label: 'Secondary destination (defaults to our story)' }),
+    imageAlt: text(
+      'Image description',
+      'Specialty Cartridge ammunition displayed on lavender podiums',
+    ),
+    buttonText: text('Primary button', 'Shop Ammo'),
+    buttonLink: Link({ label: 'Primary destination (defaults to shop)' }),
+    mobileImage: Image({ label: 'Mobile hero artwork (optional)' }),
+    showSeal: Checkbox({ label: 'Show brand seal', defaultValue: true }),
+    sealImage: Image({ label: 'Brand seal (uses supplied seal by default)' }),
+    showCorners: Checkbox({ label: 'Show decorative corners', defaultValue: true }),
+    topCornerImage: Image({ label: 'Upper-left corner artwork' }),
+    bottomCornerImage: Image({ label: 'Lower-right corner artwork' }),
   },
 });
 
 runtime.registerComponent(BrandMarquee, {
   type: 'ggg-marquee',
   label: '3G / Statement strip',
-  props: { className: style(), text: text('Statement', 'Confidence looks good on everyone') },
+  props: {
+    className: style(),
+    text: text('First statement', brandDefaults.bannerFirst),
+    secondText: text('Second statement', brandDefaults.bannerSecond),
+    thirdText: text('Third statement', brandDefaults.bannerThird),
+    fourthText: text('Fourth statement', brandDefaults.bannerFourth),
+  },
+});
+
+runtime.registerComponent(MSRangeDayLineup, {
+  type: 'ggg-lineup',
+  label: '3G / Range-day lineup',
+  props: {
+    className: style(),
+    title: paragraph('Heading', 'Meet your range-day lineup.'),
+    description: paragraph('Subtitle', 'Three calibers. One bold brand.'),
+    buttonText: text('Product button label', 'View Ammo'),
+    selectedProducts: List({
+      label: 'Product cards (empty uses the three launch calibers)',
+      type: Group({
+        label: 'Product card',
+        props: {
+          displayName: text('Display heading (blank uses catalog name)', ''),
+          entityId: Combobox({
+            label: 'BigCommerce product',
+            async getOptions(query) {
+              const products = await searchProducts(query);
+
+              return products.map((product) => ({
+                id: product.entityId.toString(),
+                label: product.name,
+                value: product.entityId.toString(),
+              }));
+            },
+          }),
+        },
+      }),
+      getItemLabel: (item) => item?.displayName || 'Product card',
+    }),
+  },
 });
 
 runtime.registerComponent(MSApparelCollection, {
@@ -117,18 +187,35 @@ runtime.registerComponent(BrandValues, {
   },
 });
 
+runtime.registerComponent(RangeDayFeature, {
+  type: 'ggg-range-day',
+  label: '3G / Make it a range day',
+  props: {
+    className: style(),
+    title: paragraph('Heading', 'Make it a\nrange day.'),
+    description: paragraph('Description', 'Find your caliber. Plan your next trip.'),
+    buttonText: text('Link label', 'Explore the Collection'),
+    buttonLink: Link({ label: 'Destination (defaults to shop)' }),
+    image: Image({ label: 'Editorial image (uses supplied artwork by default)' }),
+    imageAlt: text(
+      'Image description',
+      'Woman wearing purple hearing protection and safety glasses at an outdoor shooting range',
+    ),
+    showPattern: Checkbox({ label: 'Show monogram pattern', defaultValue: true }),
+    patternImage: Image({ label: 'Monogram edge artwork (optional)' }),
+  },
+});
+
 runtime.registerComponent(BrandNewsletter, {
   type: 'ggg-newsletter',
   label: '3G / Newsletter signup',
   props: {
     className: style(),
-    title: text('Heading', 'You’re our kind of people.'),
-    description: paragraph(
-      'Description',
-      'New arrivals, fresh ideas, and a little community in your inbox. Be part of what’s next.',
-    ),
-    eyebrow: text('Eyebrow', 'Good company. Great inbox.'),
-    privacyText: text('Privacy note', 'Only the good stuff. Unsubscribe whenever you like.'),
+    title: text('Heading', 'Stay in the loop.'),
+    description: paragraph('Description (optional)', ''),
+    placeholder: text('Email placeholder', 'Enter your email'),
+    buttonText: text('Submit label', 'Sign Up'),
+    privacyText: text('Privacy note (optional)', ''),
   },
 });
 
@@ -138,9 +225,31 @@ runtime.registerComponent(BrandFooter, {
   props: {
     className: style(),
     brand: text('Brand name', 'Give Girls Guns'),
-    tagline: text('Tagline', 'For the bold. For the individual. For each other.'),
-    artNote: text('Artwork note', 'Original spirit. AI-assisted illustrations.'),
-    instagramUrl: text('Instagram profile URL (leave blank to hide)', ''),
+    logo: Image({ label: 'Logo (uses brand artwork by default)' }),
+    logoLink: Link({ label: 'Logo destination (defaults to home)' }),
+    cropLogo: Checkbox({ label: 'Crop original logo canvas', defaultValue: true }),
+    shopLabel: text('Shop label', 'Shop'),
+    storyLabel: text('About label', 'About'),
+    contactLabel: text('Contact label', 'Contact'),
+    privacyLabel: text('Privacy label', 'Privacy'),
+    shopLink: Link({ label: 'Shop destination' }),
+    storyLink: Link({ label: 'About destination' }),
+    contactLink: Link({ label: 'Contact destination' }),
+    privacyLink: Link({ label: 'Privacy destination (defaults to store privacy policy)' }),
+    additionalLinks: List({
+      label: 'Additional footer links',
+      type: Group({
+        label: 'Footer link',
+        props: { label: text('Label', 'Link'), link: Link({ label: 'Destination' }) },
+      }),
+      getItemLabel: (item) => item?.label || 'Footer link',
+    }),
+    instagramUrl: text(
+      'Instagram URL (blank hides icon)',
+      'https://www.instagram.com/Atlanta_Arms/',
+    ),
+    showCorner: Checkbox({ label: 'Show decorative corner', defaultValue: true }),
+    cornerImage: Image({ label: 'Corner artwork (optional)' }),
   },
 });
 

@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 
-import { ApparelData, BrandSection } from '~/components/ggg-storefront';
+import { Suspense } from 'react';
+
+import { RangeDayLineup } from '@/vibes/soul/sections/ggg-storefront/range-day-lineup';
+import { LineupData, BrandSection } from '~/components/ggg-storefront';
 import { getMakeswiftPageMetadata } from '~/lib/makeswift';
 import { getMetadataAlternates } from '~/lib/seo/canonical';
 
@@ -17,10 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metadata = await getMakeswiftPageMetadata({ path: '/', locale });
 
   return {
-    title: metadata?.title ?? 'Give Girls Guns | Wear your confidence',
+    title: metadata?.title ?? 'Give Girls Guns | Find your caliber',
     description:
       metadata?.description ??
-      'Everyday apparel for independent spirits. Discover the collection and meet the Give Girls Guns community.',
+      'Find your caliber and make it a range day. Explore the Give Girls Guns ammunition lineup.',
     alternates: await getMetadataAlternates({ path: '/', locale }),
   };
 }
@@ -32,13 +35,16 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
 
   return (
-    <ApparelData locale={locale}>
+    <>
       <BrandSection label="3G · Homepage hero" name="hero" />
       <BrandSection label="3G · Statement strip" name="marquee" />
-      <BrandSection label="3G · Featured apparel" name="apparel" />
-      <BrandSection label="3G · Our community" name="story" />
-      <BrandSection label="3G · Our values" name="values" />
+      <Suspense fallback={<RangeDayLineup loading products={[]} />}>
+        <LineupData locale={locale}>
+          <BrandSection label="3G · Range-day lineup" name="lineup" />
+        </LineupData>
+      </Suspense>
+      <BrandSection label="3G · Make it a range day" name="range-day" />
       <BrandSection label="3G · Add homepage sections" name="extra" />
-    </ApparelData>
+    </>
   );
 }

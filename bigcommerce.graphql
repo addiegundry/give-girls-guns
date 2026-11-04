@@ -240,6 +240,121 @@ type AddProductReviewResult {
   errors: [AddProductReviewError!]!
 }
 
+"""An error encountered while attaching a file to a quote."""
+union AddQuoteAttachmentError = ValidationError | NotFoundError | QuoteAccessDeniedError | QuoteFeatureDisabledError
+
+"""Input for attaching a file to a quote."""
+input AddQuoteAttachmentInput {
+  """The ID of the quote to attach the file to."""
+  entityId: Int!
+
+  """The URL of the file."""
+  fileUrl: String!
+
+  """The name of the file."""
+  fileName: String!
+
+  """The type of the file."""
+  fileType: QuoteAttachmentFileType!
+
+  """The size of the file in bytes."""
+  fileSize: Int!
+}
+
+"""The result of attaching a file to a quote."""
+type AddQuoteAttachmentResult {
+  """
+  The ID of the attachment that was created, or null if the mutation failed.
+  """
+  attachmentEntityId: Int
+
+  """
+  Errors encountered while attaching a file to a quote, empty on success.
+  """
+  errors: [AddQuoteAttachmentError!]!
+}
+
+"""The contact details for a new quote."""
+input AddQuoteContactInput {
+  """The name of the contact. Required for a guest."""
+  name: String
+
+  """The email address of the contact."""
+  email: String!
+
+  """The company name of the contact."""
+  companyName: String
+
+  """The phone number of the contact."""
+  phoneNumber: String
+}
+
+"""An error encountered while creating a quote."""
+union AddQuoteError = ValidationError | GuestQuoteNotAllowedError | QuoteAccessDeniedError | QuoteFeatureDisabledError
+
+"""Input for creating a quote."""
+input AddQuoteInput {
+  """The line items of the quote."""
+  products: [AddQuoteProductInput!]!
+
+  """The contact details of the quote. Required for a guest."""
+  contact: AddQuoteContactInput
+
+  """The shipping address of the quote."""
+  shippingAddress: QuoteAddressInput
+
+  """The billing address of the quote."""
+  billingAddress: QuoteAddressInput
+
+  """The title of the quote."""
+  title: String
+
+  """A reference number for the quote."""
+  referenceNumber: String
+
+  """Notes for the quote."""
+  notes: String
+
+  """The values of the quote extra fields defined by the merchant."""
+  extraFields: [QuoteExtraFieldInput!]
+}
+
+"""A line item to add to a new quote."""
+input AddQuoteProductInput {
+  """The BigCommerce catalog product ID."""
+  productEntityId: Int!
+
+  """The BigCommerce catalog variant ID."""
+  variantEntityId: Int!
+
+  """The SKU of the product."""
+  sku: String
+
+  """The quantity requested."""
+  quantity: Int!
+
+  """Notes for the line item."""
+  notes: String
+
+  """The options selected for the line item."""
+  options: [QuoteProductOptionInput!]
+}
+
+"""The result of creating a quote."""
+type AddQuoteResult {
+  """The ID of the quote that was created, or null if the mutation failed."""
+  entityId: Int
+
+  """When the quote was created."""
+  createdAt: DateTime
+
+  """The public identifier of the quote that was created."""
+  uuid: String
+
+  """Errors encountered while creating a quote, empty on success."""
+  errors: [AddQuoteError!]!
+}
+
 """Add wishlist items input object"""
 input AddWishlistItemsInput {
   """The wishlist id"""
@@ -1327,6 +1442,29 @@ type CheckoutMutations {
   ): CompleteCheckoutResult
 }
 
+"""Input for checking out a quote."""
+input CheckoutQuoteInput {
+  """The ID of the quote to check out."""
+  entityId: Int!
+
+  """The public identifier of the quote. Required for a guest."""
+  uuid: String
+}
+
+"""
+The result of checking out a quote: either the checkout details or the error that prevented it.
+"""
+union CheckoutQuoteResult = CheckoutQuoteSuccess | ValidationError | NotFoundError | QuoteAccessDeniedError | GuestQuoteNotAllowedError | QuoteNotAvailableError | QuoteFeatureDisabledError
+
+"""The checkout details of a quote."""
+type CheckoutQuoteSuccess {
+  """The URL of the checkout for the quote."""
+  checkoutUrl: String!
+
+  """The ID of the cart created for the quote."""
+  cartId: String!
+}
+
 """
 A failure pertaining to a shipping consignment during checkout creation or update. Inspect `code` for the specific cause.
 """
@@ -1447,6 +1585,48 @@ type CompanyMutations {
     """The id of the company user to update and the fields to change."""
     input: UpdateCompanyUserInput!
   ): UpdateCompanyUserResult!
+
+  """Create a quote."""
+  addQuote(
+    """The details of the quote to create."""
+    input: AddQuoteInput!
+  ): AddQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Add a message to a quote."""
+  updateQuote(
+    """The id of the quote to update and the message to add."""
+    input: UpdateQuoteInput!
+  ): UpdateQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Check out a quote."""
+  checkoutQuote(
+    """The id of the quote to check out."""
+    input: CheckoutQuoteInput!
+  ): CheckoutQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Attach a file to a quote."""
+  addQuoteAttachment(
+    """The id of the quote and the file to attach."""
+    input: AddQuoteAttachmentInput!
+  ): AddQuoteAttachmentResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Delete a file attached to a quote."""
+  deleteQuoteAttachment(
+    """The id of the quote and the attachment to delete."""
+    input: DeleteQuoteAttachmentInput!
+  ): DeleteQuoteAttachmentResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Request the PDF of a quote."""
+  requestQuotePdf(
+    """The id and creation date of the quote and the PDF options."""
+    input: RequestQuotePdfInput!
+  ): RequestQuotePdfResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Email a quote."""
+  emailQuote(
+    """The id of the quote, the recipient and the subject."""
+    input: EmailQuoteInput!
+  ): EmailQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """The status of a company."""
@@ -2008,6 +2188,48 @@ type CustomerMutations {
 
   """Stored payment instruments mutations."""
   storedPaymentInstruments: StoredPaymentInstrumentMutations! @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Create a quote."""
+  addQuote(
+    """The details of the quote to create."""
+    input: AddQuoteInput!
+  ): AddQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Add a message to a quote."""
+  updateQuote(
+    """The id of the quote to update and the message to add."""
+    input: UpdateQuoteInput!
+  ): UpdateQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Check out a quote."""
+  checkoutQuote(
+    """The id of the quote to check out."""
+    input: CheckoutQuoteInput!
+  ): CheckoutQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Attach a file to a quote."""
+  addQuoteAttachment(
+    """The id of the quote and the file to attach."""
+    input: AddQuoteAttachmentInput!
+  ): AddQuoteAttachmentResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Delete a file attached to a quote."""
+  deleteQuoteAttachment(
+    """The id of the quote and the attachment to delete."""
+    input: DeleteQuoteAttachmentInput!
+  ): DeleteQuoteAttachmentResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Request the PDF of a quote."""
+  requestQuotePdf(
+    """The id and creation date of the quote and the PDF options."""
+    input: RequestQuotePdfInput!
+  ): RequestQuotePdfResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Email a quote."""
+  emailQuote(
+    """The id of the quote, the recipient and the subject."""
+    input: EmailQuoteInput!
+  ): EmailQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """
@@ -2189,6 +2411,26 @@ type DeleteCustomerAddressResult {
   errors: [DeleteCustomerAddressError!]!
 }
 
+"""An error encountered while deleting a quote attachment."""
+union DeleteQuoteAttachmentError = ValidationError | NotFoundError | QuoteAccessDeniedError | QuoteFeatureDisabledError
+
+"""Input for deleting a file attached to a quote."""
+input DeleteQuoteAttachmentInput {
+  """The ID of the quote the file is attached to."""
+  entityId: Int!
+
+  """The ID of the attachment to delete."""
+  attachmentEntityId: Int!
+}
+
+"""The result of deleting a quote attachment."""
+type DeleteQuoteAttachmentResult {
+  """
+  Errors encountered while deleting a quote attachment, empty on success.
+  """
+  errors: [DeleteQuoteAttachmentError!]!
+}
+
 """Error when deleting a stored payment instrument."""
 type DeleteStoredPaymentInstrumentError implements Error {
   """A description of the error in user language."""
@@ -2242,6 +2484,27 @@ An error due to the customer email already being in use when attempting registra
 type EmailAlreadyInUseError implements Error {
   """A description of the error in user language."""
   message: String!
+}
+
+"""An error encountered while emailing a quote."""
+union EmailQuoteError = ValidationError | NotFoundError | QuoteAccessDeniedError | QuoteFeatureDisabledError
+
+"""Input for emailing a quote."""
+input EmailQuoteInput {
+  """The ID of the quote to email."""
+  entityId: Int!
+
+  """The email address to send the quote to."""
+  email: String!
+
+  """The subject of the email."""
+  subject: String
+}
+
+"""The result of emailing a quote."""
+type EmailQuoteResult {
+  """Errors encountered while emailing a quote, empty on success."""
+  errors: [EmailQuoteError!]!
 }
 
 """An error object, indicating what went wrong with a mutation."""
@@ -2365,6 +2628,12 @@ enum GuestAccountCreation {
 
   """Do not create a customer account, regardless of the channel's setting."""
   SKIP
+}
+
+"""The store does not allow guest quotes."""
+type GuestQuoteNotAllowedError implements Error {
+  """A description of the error in user language."""
+  message: String!
 }
 
 """
@@ -2637,6 +2906,9 @@ type Mutation {
   """The payment mutations."""
   payment: PaymentMutations!
 
+  """The quote mutations that guests can call."""
+  quote: QuoteMutations @deprecated(reason: "Alpha version. Do not use in production.")
+
   """MCP (Model Context Protocol) session sync mutations."""
   mcp: McpMutations!
 
@@ -2828,6 +3100,108 @@ type ProductViewedEventResult {
   executed: Boolean!
 }
 
+"""The quote does not belong to the caller."""
+type QuoteAccessDeniedError implements Error {
+  """A description of the error in user language."""
+  message: String!
+}
+
+"""An address for a new quote."""
+input QuoteAddressInput {
+  """First name of the address contact."""
+  firstName: String
+
+  """Last name of the address contact."""
+  lastName: String
+
+  """First line of the street address."""
+  address1: String
+
+  """Second line of the street address."""
+  address2: String
+
+  """City."""
+  city: String
+
+  """Name of the state or province."""
+  stateOrProvince: String
+
+  """Postal or ZIP code."""
+  postalCode: String
+
+  """ISO 3166-1 alpha-2 country code."""
+  countryCode: String
+
+  """Phone number for the address contact."""
+  phone: String
+
+  """Optional label for the address."""
+  label: String
+}
+
+"""The value of a quote extra field."""
+input QuoteExtraFieldInput {
+  """The ID of the extra field definition."""
+  entityId: Int!
+
+  """The name of the extra field."""
+  name: String!
+
+  """The value of the extra field."""
+  value: String!
+}
+
+"""The quotes feature is not available for the store."""
+type QuoteFeatureDisabledError implements Error {
+  """A description of the error in user language."""
+  message: String!
+}
+
+"""Mutations for quotes that guests can call."""
+type QuoteMutations {
+  """Create a quote."""
+  addQuote(
+    """The details of the quote to create."""
+    input: AddQuoteInput!
+  ): AddQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Add a message to a quote."""
+  updateQuote(
+    """The id of the quote to update and the message to add."""
+    input: UpdateQuoteInput!
+  ): UpdateQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """Check out a quote."""
+  checkoutQuote(
+    """The id of the quote to check out."""
+    input: CheckoutQuoteInput!
+  ): CheckoutQuoteResult @deprecated(reason: "Alpha version. Do not use in production.")
+}
+
+"""The quote has expired or has already been ordered."""
+type QuoteNotAvailableError implements Error {
+  """A description of the error in user language."""
+  message: String!
+}
+
+"""An option selected on a quote line item."""
+input QuoteProductOptionInput {
+  """The ID of the product option."""
+  optionId: Int!
+
+  """The display name of the option, for example Size."""
+  optionName: String!
+
+  """The value of the chosen option."""
+  optionValue: String!
+
+  """The text of the chosen option value, for example Large."""
+  optionLabel: String!
+
+  """The type of the option."""
+  type: QuoteProductOptionType!
+}
+
 """Recaptcha input (in case Recaptcha is enabled on a store)"""
 input ReCaptchaV2Input {
   """Recaptcha token"""
@@ -2939,6 +3313,33 @@ type RemoveSubscriberResult {
 type RemoveSubscriberUnexpectedError implements Error {
   """A description of the error in user language."""
   message: String!
+}
+
+"""An error encountered while requesting a quote PDF."""
+union RequestQuotePdfError = NotFoundError | QuoteAccessDeniedError | QuoteFeatureDisabledError
+
+"""Input for requesting the PDF of a quote."""
+input RequestQuotePdfInput {
+  """The ID of the quote."""
+  entityId: Int!
+
+  """The date the quote was created."""
+  createdAt: DateTime!
+
+  """The language of the PDF."""
+  lang: String!
+
+  """Whether the PDF is a preview."""
+  isPreview: Boolean
+}
+
+"""The result of requesting a quote PDF."""
+type RequestQuotePdfResult {
+  """The URL of the generated PDF."""
+  pdfUrl: String
+
+  """Errors encountered while requesting a quote PDF, empty on success."""
+  errors: [RequestQuotePdfError!]!
 }
 
 """An error when requesting a reset password email."""
@@ -3821,6 +4222,30 @@ type UpdateCustomerResult {
   errors: [UpdateCustomerError!]!
 }
 
+"""An error encountered while updating a quote."""
+union UpdateQuoteError = ValidationError | NotFoundError | QuoteAccessDeniedError | GuestQuoteNotAllowedError | QuoteFeatureDisabledError
+
+"""Input for adding a message to a quote."""
+input UpdateQuoteInput {
+  """The ID of the quote to update."""
+  entityId: Int!
+
+  """The message to add to the quote."""
+  message: String!
+
+  """The public identifier of the quote. Required for a guest."""
+  uuid: String
+}
+
+"""The result of updating a quote."""
+type UpdateQuoteResult {
+  """The ID of the quote that was updated, or null if the mutation failed."""
+  entityId: Int
+
+  """Errors encountered while updating a quote, empty on success."""
+  errors: [UpdateQuoteError!]!
+}
+
 """Error when updating a stored payment instrument."""
 type UpdateStoredPaymentInstrumentError implements Error {
   """A description of the error in user language."""
@@ -4066,6 +4491,31 @@ type ActiveCompany {
     """Criteria used to narrow down the users returned."""
     filters: CompanyUsersFiltersInput
   ): CompanyUserConnection
+
+  """A single quote by id and creation date."""
+  quote(
+    """The id of the quote to fetch."""
+    entityId: Int!
+
+    """The date the quote was created."""
+    createdAt: DateTime!
+
+    """The public identifier of the quote."""
+    uuid: String
+  ): Quote @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """A paginated list of quotes the caller can see."""
+  quotes(
+    """Criteria used to narrow down the quotes returned."""
+    filters: QuoteFiltersInput
+
+    """The field and direction to sort the quotes by."""
+    sort: QuoteSortInput
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): QuoteConnection @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """A connection to a list of customer addresses."""
@@ -4169,6 +4619,11 @@ type B2BConfig {
   Which account types shoppers can register for on this storefront channel. Null when the store has no B2B account registration settings, in which case use standard registration. If the settings cannot be retrieved, the field is null and the response includes an UPSTREAM_ERROR.
   """
   accountRegistration: B2BAccountRegistrationConfig
+
+  """
+  The configuration toggles for the quote module, or null if B2B quote settings are unavailable for the store.
+  """
+  quote: [B2BConfigField!] @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """A single B2B configuration toggle."""
@@ -4239,6 +4694,11 @@ type B2BExtraFields {
   The extra field definitions for the company user module, or null if B2B user management is unavailable for the store or the shopper is not logged in.
   """
   user: [B2BExtraFieldDefinition!]
+
+  """
+  The extra field definitions for the quote module, or null if B2B quote settings are unavailable for the store.
+  """
+  companyQuote: [B2BExtraFieldDefinition!] @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """A B2B extra field that holds multiple lines of text."""
@@ -5718,6 +6178,33 @@ type Catalog {
   productComparisonsEnabled: Boolean
 }
 
+"""A catalog attribute assignment resolved for a product."""
+type CatalogProductAttribute {
+  """The resolved display name of the attribute (default/global context)."""
+  displayName: String!
+
+  """The resolved value of the attribute (default/global context)."""
+  value: String!
+}
+
+"""A connection to a list of items."""
+type CatalogProductAttributeConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CatalogProductAttributeEdge!]
+}
+
+"""An edge in a connection."""
+type CatalogProductAttributeEdge {
+  """The item at the end of the edge."""
+  node: CatalogProductAttribute!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
 """Product Option"""
 interface CatalogProductOption {
   """Unique ID for the option."""
@@ -6926,18 +7413,6 @@ enum CompanyOrdersSortInput {
   ID_Z_TO_A
 }
 
-"""Queries for B2B company data."""
-type CompanyQueries {
-  """Paginated list of addresses associated with the customer's company."""
-  addresses(before: String, after: String, first: Int, last: Int, filters: CompanyAddressFiltersInput, sort: [CompanyAddressSortInput!], includesExtraFields: Boolean = false): CompanyAddressConnection! @deprecated(reason: "Deprecated, please use 'customer.activeCompany.addresses' instead")
-
-  """A single company address by id."""
-  address(
-    """The id of the company address to fetch."""
-    entityId: Int!
-  ): CompanyAddress
-}
-
 """A role that can be assigned to a user of a B2B company."""
 type CompanyRole {
   """
@@ -6983,7 +7458,7 @@ input CompanyRolesFiltersInput {
   """
   Filter the roles down to those whose name or code matches this free-text search term.
   """
-  search: String
+  searchTerm: String
 }
 
 """A user of a B2B company."""
@@ -7457,6 +7932,31 @@ type Customer {
   The customer's active company context, or null when the shopper is not an authenticated customer.
   """
   activeCompany: ActiveCompany
+
+  """A single quote by id and creation date."""
+  quote(
+    """The id of the quote to fetch."""
+    entityId: Int!
+
+    """The date the quote was created."""
+    createdAt: DateTime!
+
+    """The public identifier of the quote."""
+    uuid: String
+  ): Quote @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """A paginated list of quotes the caller can see."""
+  quotes(
+    """Criteria used to narrow down the quotes returned."""
+    filters: QuoteFiltersInput
+
+    """The field and direction to sort the quotes by."""
+    sort: QuoteSortInput
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): QuoteConnection @deprecated(reason: "Alpha version. Do not use in production.")
 
   """Metafield data related to a customer."""
   metafields(
@@ -11075,6 +11575,11 @@ type Product implements Node {
 
   """Locale paths and URLs."""
   locales(before: String, after: String, first: Int, last: Int): LocaleAlternateConnection!
+
+  """
+  List of catalog attributes (display name and resolved value) assigned to the product.
+  """
+  attributes(before: String, after: String, first: Int, last: Int): CatalogProductAttributeConnection! @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """Product Attribute Filter"""
@@ -11559,8 +12064,451 @@ type Query {
   """Geography information."""
   geography: Geography!
 
-  """Access B2B company queries for the authenticated customer."""
-  company: CompanyQueries @deprecated(reason: "Deprecated, please use 'customer.activeCompany' instead")
+  """
+  A single quote for a guest, by id, creation date and public identifier.
+  """
+  quote(
+    """The id of the quote to fetch."""
+    entityId: Int!
+
+    """The date the quote was created."""
+    createdAt: DateTime!
+
+    """The public identifier of the quote."""
+    uuid: String!
+  ): Quote @deprecated(reason: "Alpha version. Do not use in production.")
+}
+
+"""A quote requested by a shopper and managed by the merchant."""
+type Quote {
+  """The unique ID of the quote."""
+  entityId: Int!
+
+  """The human-readable quote number, or null if not assigned."""
+  quoteNumber: String
+
+  """The reference number supplied for the quote, or null if none."""
+  referenceNumber: String
+
+  """
+  The public identifier of the quote, used by guest shoppers to access it.
+  """
+  uuid: String
+
+  """The title of the quote."""
+  title: String
+
+  """The lifecycle status of the quote."""
+  status: QuoteStatus
+
+  """The notes attached to the quote."""
+  notes: String
+
+  """The legal terms attached to the quote."""
+  legalTerms: String
+
+  """The name of the person who created the quote."""
+  createdBy: String
+
+  """When the quote was created."""
+  createdAt: DateTime!
+
+  """When the quote was last updated."""
+  updatedAt: DateTime
+
+  """When the quote expires."""
+  expiresAt: DateTime
+
+  """
+  The ID of the order the quote was converted into, or null if it has not been ordered.
+  """
+  orderId: String
+
+  """
+  Whether the total of the quote is still to be determined by the merchant.
+  """
+  totalIsTbd: Boolean!
+
+  """The contact details of the person the quote is for."""
+  contact: QuoteContact
+
+  """The shipping address of the quote."""
+  shippingAddress: QuoteAddress
+
+  """The billing address of the quote."""
+  billingAddress: QuoteAddress
+
+  """The line items of the quote."""
+  products: [QuoteProduct!]!
+
+  """The values of the quote extra fields defined by the merchant."""
+  extraFields: [QuoteExtraFieldValue!]!
+
+  """The files attached to the quote."""
+  attachments: [QuoteAttachment!]!
+
+  """The messages exchanged on the quote."""
+  messages: [QuoteMessage!]!
+
+  """The sales representative assigned to the quote."""
+  salesRep: QuoteSalesRep
+
+  """The calculated prices of the quote, or null if they are not available."""
+  prices: QuotePrices
+}
+
+"""An address on a quote."""
+type QuoteAddress {
+  """First name of the address contact."""
+  firstName: String
+
+  """Last name of the address contact."""
+  lastName: String
+
+  """First line of the street address."""
+  address1: String
+
+  """Second line of the street address."""
+  address2: String
+
+  """City."""
+  city: String
+
+  """Name of the state or province."""
+  stateOrProvince: String
+
+  """State or province code."""
+  stateCode: String
+
+  """Postal or ZIP code."""
+  postalCode: String
+
+  """Full name of the country."""
+  country: String
+
+  """ISO 3166-1 alpha-2 country code."""
+  countryCode: String
+
+  """Phone number for the address contact."""
+  phone: String
+
+  """Optional label for the address."""
+  label: String
+}
+
+"""A file attached to a quote."""
+type QuoteAttachment {
+  """The unique ID of the attachment."""
+  entityId: Int!
+
+  """The name of the file."""
+  fileName: String
+
+  """The type of the file."""
+  fileType: QuoteAttachmentFileType
+
+  """The URL of the file."""
+  fileUrl: String
+
+  """The name of the person who attached the file."""
+  createdBy: String
+}
+
+"""The type of a file attached to a quote."""
+enum QuoteAttachmentFileType {
+  """The file is a CSV file."""
+  CSV
+
+  """The file is a Word document (.doc)."""
+  DOC
+
+  """The file is a Word document (.docx)."""
+  DOCX
+
+  """The file is a GIF image."""
+  GIF
+
+  """The file is a JPEG image."""
+  JPEG
+
+  """
+  The file is of a type that is not listed here. It is only returned for existing files and cannot be used to attach a file.
+  """
+  OTHER
+
+  """The file is a PDF document."""
+  PDF
+
+  """The file is a PNG image."""
+  PNG
+
+  """The file is a WebP image."""
+  WEBP
+
+  """The file is an Excel spreadsheet (.xls)."""
+  XLS
+
+  """The file is an Excel spreadsheet (.xlsx)."""
+  XLSX
+}
+
+"""A paginated list of quotes."""
+type QuoteConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [QuoteEdge!]
+
+  """
+  Collection-level information about the full list of quotes, such as its total size.
+  """
+  collectionInfo: CollectionInfo
+}
+
+"""The contact details on a quote."""
+type QuoteContact {
+  """The name of the contact."""
+  name: String
+
+  """The email address of the contact."""
+  email: String
+
+  """The company name of the contact."""
+  companyName: String
+
+  """The phone number of the contact."""
+  phoneNumber: String
+}
+
+"""An edge in the quote connection."""
+type QuoteEdge {
+  """The quote at the end of the edge."""
+  node: Quote!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+"""The value of a quote extra field defined by the merchant."""
+type QuoteExtraFieldValue {
+  """The name of the extra field."""
+  name: String!
+
+  """The value of the extra field."""
+  value: String
+}
+
+"""Filters to apply when querying quotes."""
+input QuoteFiltersInput {
+  """Filter to quotes with this status."""
+  status: QuoteStatus
+
+  """Text search applied to quote fields."""
+  searchTerm: String
+}
+
+"""A message on a quote."""
+type QuoteMessage {
+  """When the message was created."""
+  createdAt: DateTime
+
+  """The role of the author of the message."""
+  role: QuoteMessageRole
+
+  """The text of the message."""
+  message: String
+
+  """Whether the message has been read."""
+  isRead: Boolean
+}
+
+"""The role of the author of a quote message."""
+enum QuoteMessageRole {
+  """The message was written by the customer."""
+  CUSTOMER
+
+  """The message was written by a sales representative."""
+  SALES_REP
+}
+
+"""The prices of a quote. Read-only and calculated by the backend."""
+type QuotePrices {
+  """The subtotal of the quote."""
+  subtotal: Money
+
+  """The total discount applied to the quote."""
+  discount: Money
+
+  """The shipping total of the quote."""
+  shippingTotal: Money
+
+  """The tax total of the quote."""
+  taxTotal: Money
+
+  """The grand total of the quote."""
+  grandTotal: Money
+}
+
+"""A line item of a quote."""
+type QuoteProduct {
+  """The catalog product ID."""
+  productEntityId: Int!
+
+  """The catalog variant ID, or null if not set."""
+  variantEntityId: Int
+
+  """The SKU of the product."""
+  sku: String
+
+  """The name of the product."""
+  name: String
+
+  """The quantity requested."""
+  quantity: Int!
+
+  """The URL of the product image."""
+  imageUrl: String
+
+  """The notes attached to the line item."""
+  notes: String
+
+  """The options selected for the line item."""
+  options: [QuoteProductOption!]!
+
+  """
+  The base price of the product. Read-only and calculated by the backend.
+  """
+  basePrice: Money
+
+  """
+  The price offered for the product after discounts. Read-only and calculated by the backend.
+  """
+  offeredPrice: Money
+
+  """
+  The discount applied to the line item. Read-only and calculated by the backend.
+  """
+  discount: Money
+}
+
+"""
+An option selected on a quote line item. For example the option name is Size and the option label is Large.
+"""
+type QuoteProductOption {
+  """The ID of the product option."""
+  optionId: Int
+
+  """The display name of the option, for example Size."""
+  optionName: String
+
+  """The value of the chosen option."""
+  optionValue: String
+
+  """The text of the chosen option value, for example Large."""
+  optionLabel: String
+
+  """The type of the option."""
+  type: QuoteProductOptionType
+}
+
+"""The type of a product option on a quote line item."""
+enum QuoteProductOptionType {
+  """The option is a checkbox."""
+  CHECKBOX
+
+  """The option is a date picker."""
+  DATE
+
+  """The option is a dropdown list."""
+  DROPDOWN
+
+  """The option is a file upload."""
+  FILE
+
+  """The option is a multi-line text box."""
+  MULTI_LINE_TEXT
+
+  """The option is a numbers-only text box."""
+  NUMBERS_ONLY_TEXT
+
+  """The option is of a type that is not listed here."""
+  OTHER
+
+  """The option is a list of products."""
+  PRODUCT_LIST
+
+  """The option is a list of products with images."""
+  PRODUCT_LIST_WITH_IMAGES
+
+  """The option is radio buttons."""
+  RADIO_BUTTONS
+
+  """The option is rectangle buttons."""
+  RECTANGLES
+
+  """The option is a swatch."""
+  SWATCH
+
+  """The option is a single-line text box."""
+  TEXT
+}
+
+"""The sales representative assigned to a quote."""
+type QuoteSalesRep {
+  """The name of the sales representative."""
+  name: String
+
+  """The email address of the sales representative."""
+  email: String
+
+  """The phone number of the sales representative."""
+  phoneNumber: String
+}
+
+"""The direction to sort quotes in."""
+enum QuoteSortDirection {
+  """Sort in ascending order."""
+  ASC
+
+  """Sort in descending order."""
+  DESC
+}
+
+"""The field to sort quotes by."""
+enum QuoteSortField {
+  """Sort by the date the quote was created."""
+  CREATED_AT
+
+  """Sort by the date the quote expires."""
+  EXPIRES_AT
+
+  """Sort by the date the quote was last updated."""
+  UPDATED_AT
+}
+
+"""Specifies a field and direction for sorting quotes."""
+input QuoteSortInput {
+  """The field to sort by."""
+  field: QuoteSortField!
+
+  """The sort direction."""
+  direction: QuoteSortDirection!
+}
+
+"""The lifecycle status of a quote."""
+enum QuoteStatus {
+  """The quote has been archived and is no longer active."""
+  ARCHIVED
+
+  """The quote has passed its expiry date and can no longer be ordered."""
+  EXPIRED
+
+  """The quote is open and can still be negotiated or ordered."""
+  OPEN
+
+  """The quote has been converted into an order."""
+  ORDERED
 }
 
 """Radio buttons form field."""

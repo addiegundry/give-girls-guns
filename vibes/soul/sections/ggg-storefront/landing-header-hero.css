@@ -1,0 +1,398 @@
+@font-face {
+  font-family: 'GGG Picky Retro';
+  src: url('/ggg/fonts/picky-retro-font-by-keithzo.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GGG Goodly';
+  src: url('/ggg/fonts/goodly/GoodlyRegular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GGG Goodly';
+  src: url('/ggg/fonts/goodly/GoodlyMedium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GGG Goodly';
+  src: url('/ggg/fonts/goodly/GoodlyBold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+.ggg-landing-header,
+.ggg-landing-hero {
+  --landing-ink: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+  color: var(--landing-ink);
+}
+
+.ggg-landing-header {
+  position: relative;
+  z-index: 20;
+  background: linear-gradient(105deg, #f5e6fc, #f7edfc 55%, #f4e6fa);
+}
+
+.ggg-landing-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  min-height: clamp(81px, 7.66vw, 116px);
+  padding: 6px 4.5% 6px 6.6%;
+}
+
+.ggg-landing-logo {
+  position: relative;
+  display: block;
+  width: clamp(65px, 6.15vw, 94px);
+  aspect-ratio: 436 / 460;
+  overflow: hidden;
+  justify-self: start;
+}
+
+.ggg-landing-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* The supplied PNG includes a large transparent square canvas. Crop only that canvas. */
+.ggg-landing-logo-cropped img {
+  position: absolute;
+  width: 229.36%;
+  height: auto;
+  max-width: none;
+  left: -64.68%;
+  top: -58.7%;
+}
+
+.ggg-landing-desktop-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: clamp(28px, 4.4vw, 64px);
+  font-size: clamp(17px, 1.75vw, 24px);
+  font-weight: 700;
+  line-height: 1.25;
+  transform: translateX(17px);
+}
+
+.ggg-landing-desktop-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.ggg-landing-desktop-nav a:hover {
+  text-decoration-line: underline;
+}
+
+.ggg-landing-nav-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+
+.ggg-landing-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+.ggg-landing-icon:hover {
+  background: #6e50840d;
+}
+
+.ggg-landing-icon img,
+.ggg-landing-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.ggg-landing-menu-toggle,
+.ggg-landing-mobile-nav {
+  display: none;
+}
+
+.ggg-landing-search {
+  padding: 20px max(24px, 6.6vw) 28px;
+  border-top: 1px solid #6e508426;
+}
+
+.ggg-landing-search[hidden] {
+  display: none;
+}
+
+.ggg-landing-search form {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.ggg-landing-search label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ggg-landing-search-field {
+  display: flex;
+  gap: 12px;
+}
+
+.ggg-landing-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid #6e5084;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+.ggg-landing-search button {
+  min-height: 48px;
+  padding: 10px 22px;
+  border-radius: 8px;
+  background: var(--landing-ink);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ggg-landing-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 44% 1fr;
+  align-items: center;
+  min-height: min(38.5vw, 778px);
+  overflow: hidden;
+  background: #f4cde5;
+}
+
+.ggg-landing-hero-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.ggg-landing-hero-art img {
+  object-fit: cover;
+  object-position: right center;
+}
+
+.ggg-landing-mobile-art {
+  display: none;
+}
+
+.ggg-landing-hero-copy {
+  position: relative;
+  padding: 5.75vw 0 5.05vw 5.65vw;
+}
+
+.ggg-storefront .ggg-landing-hero h1 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(48px, 7.4vw, 140px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.76;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+  text-wrap: initial;
+  color: #612675;
+}
+
+.ggg-storefront .ggg-landing-hero-copy p {
+  margin-top: clamp(12px, 1.1vw, 22px);
+  font-size: clamp(16px, 1.92vw, 32px);
+  line-height: 1.35;
+}
+
+.ggg-landing-hero-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: min(24.8vw, 410px);
+  min-height: max(48px, 5vw);
+  margin-top: 1.9vw;
+  padding: 8px 20px;
+  border: 1px solid #ff9985;
+  border-radius: clamp(12px, 1.3vw, 20px);
+  background: linear-gradient(110deg, #ff4028, #fa321c);
+  color: #fff;
+  font-size: clamp(21px, 2.5vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  transition: background 150ms ease;
+}
+
+.ggg-landing-hero-button:hover {
+  background: #df2918;
+}
+
+.ggg-landing-hero-corner {
+  position: absolute;
+  width: 20%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ggg-landing-hero-corner-top {
+  top: 0;
+  left: 0;
+}
+
+.ggg-landing-hero-corner-bottom {
+  right: 0;
+  bottom: 0;
+}
+
+.ggg-landing-hero-seal {
+  position: absolute;
+  top: -4%;
+  left: 42.4%;
+  width: 18%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 900px) {
+  .ggg-landing-nav {
+    grid-template-columns: auto 1fr;
+    min-height: 80px;
+    padding: 8px 24px;
+  }
+
+  .ggg-landing-desktop-nav {
+    display: none;
+  }
+
+  .ggg-landing-menu-toggle {
+    display: inline-flex;
+  }
+
+  .ggg-landing-mobile-nav:not([hidden]) {
+    display: grid;
+    gap: 2px;
+    padding: 4px 24px 20px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .ggg-landing-mobile-nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    border-top: 1px solid #6e508426;
+  }
+}
+
+@media (max-width: 700px) {
+  .ggg-landing-nav {
+    min-height: 76px;
+    padding: 8px 20px;
+    gap: 16px;
+  }
+
+  .ggg-landing-logo {
+    width: 53px;
+  }
+
+  .ggg-landing-nav-actions {
+    gap: 4px;
+  }
+
+  .ggg-landing-icon img,
+  .ggg-landing-icon svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .ggg-landing-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    background: #f4cee8 url('/ggg/landing/background-hero-gradient.png') center / cover;
+  }
+
+  .ggg-landing-hero-copy {
+    order: -1;
+    padding: 44px 24px 24px;
+  }
+
+  .ggg-storefront .ggg-landing-hero h1 {
+    max-width: 500px;
+    font-size: clamp(46px, 12.8vw, 76px);
+    line-height: 0.94;
+  }
+
+  .ggg-storefront .ggg-landing-hero-copy p {
+    max-width: 380px;
+    margin-top: 18px;
+    font-size: clamp(17px, 4.7vw, 23px);
+  }
+
+  .ggg-landing-hero-button {
+    width: min(100%, 280px);
+    min-height: 52px;
+    margin-top: 20px;
+    border-radius: 12px;
+    font-size: 25px;
+  }
+
+  .ggg-landing-hero-art {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    width: 100%;
+    aspect-ratio: 1.65;
+  }
+
+  .ggg-landing-has-mobile-art .ggg-landing-desktop-art {
+    display: none;
+  }
+
+  .ggg-landing-mobile-art {
+    display: block;
+  }
+
+  .ggg-landing-hero-corner-top {
+    width: 130px;
+  }
+
+  .ggg-landing-hero-corner-bottom {
+    width: 140px;
+  }
+
+  .ggg-landing-hero-seal {
+    top: -20px;
+    left: -12px;
+    width: 120px;
+  }
+}

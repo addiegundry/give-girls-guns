@@ -2,6 +2,9 @@ import { setRequestLocale } from 'next-intl/server';
 import { PropsWithChildren } from 'react';
 
 import '@/vibes/soul/sections/ggg-storefront/styles.css';
+import '@/vibes/soul/sections/ggg-storefront/landing-header-hero.css';
+import '@/vibes/soul/sections/ggg-storefront/landing-lineup.css';
+import '@/vibes/soul/sections/ggg-storefront/landing-closing.css';
 
 import { BrandSection } from '~/components/ggg-storefront';
 
@@ -16,7 +19,7 @@ export default async function DefaultLayout({ params, children }: Props) {
 
   return (
     <div className="ggg-storefront">
-      <BrandSection label="3G · Header and announcement" name="header" />
+      <BrandSection label="3G · Navigation" name="header" />
 
       <main className="ggg-main-content" id="main-content">
         {children}

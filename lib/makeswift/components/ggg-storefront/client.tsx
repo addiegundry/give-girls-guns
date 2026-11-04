@@ -5,11 +5,20 @@ import { createContext, ReactNode, useContext } from 'react';
 import { Product } from '@/vibes/soul/primitives/product-card';
 import { ApparelCollection, BrandContact } from '@/vibes/soul/sections/ggg-storefront';
 import { useProducts } from '~/lib/makeswift/utils/use-products';
-import { APPAREL_PRODUCT_IDS } from '~/lib/ggg-storefront';
+import {
+  APPAREL_PRODUCT_IDS,
+  DEFAULT_LINEUP_PRODUCTS,
+  type LineupSelection,
+} from '~/lib/ggg-storefront';
+import {
+  RangeDayLineup,
+  type RangeDayLineupProps,
+} from '@/vibes/soul/sections/ggg-storefront/range-day-lineup';
 
 const APPAREL_IDS = APPAREL_PRODUCT_IDS.map(String);
 
 const CatalogContext = createContext<Product[] | null>(null);
+const LineupContext = createContext<Product[] | null>(null);
 const ContactContext = createContext<ReactNode>(null);
 
 export function ApparelProvider({
@@ -20,6 +29,46 @@ export function ApparelProvider({
   children: ReactNode;
 }) {
   return <CatalogContext.Provider value={products}>{children}</CatalogContext.Provider>;
+}
+
+export function LineupProvider({
+  products,
+  children,
+}: {
+  products: Product[];
+  children: ReactNode;
+}) {
+  return <LineupContext.Provider value={products}>{children}</LineupContext.Provider>;
+}
+
+export function MSRangeDayLineup({
+  selectedProducts = [],
+  ...props
+}: Omit<RangeDayLineupProps, 'products' | 'loading'> & { selectedProducts?: LineupSelection[] }) {
+  const initialProducts = useContext(LineupContext);
+  const chosenProducts = selectedProducts.filter((product) => product.entityId);
+  const selection = chosenProducts.length ? chosenProducts : DEFAULT_LINEUP_PRODUCTS;
+  const useInitialProducts = !chosenProducts.length && initialProducts !== null;
+  const { products, isLoading } = useProducts({
+    collection: 'none',
+    additionalProductIds: useInitialProducts
+      ? []
+      : selection.flatMap((product) => (product.entityId ? [product.entityId] : [])),
+  });
+  const catalogProducts = useInitialProducts ? initialProducts : products;
+  const orderedProducts = selection.flatMap((selected) => {
+    const product = catalogProducts?.find((item) => item.id === selected.entityId);
+
+    return product ? [{ ...product, displayName: selected.displayName }] : [];
+  });
+
+  return (
+    <RangeDayLineup
+      {...props}
+      loading={!useInitialProducts && isLoading}
+      products={orderedProducts}
+    />
+  );
 }
 
 export function ContactFormProvider({ form, children }: { form: ReactNode; children: ReactNode }) {
