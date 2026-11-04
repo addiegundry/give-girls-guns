@@ -4608,6 +4608,22 @@ type B2BAccountRegistrationConfig {
   isPersonalAccountEnabled: Boolean!
 }
 
+"""
+The company approval options configured in the B2B control panel, under Company Requests. These apply to the whole store, whichever channel is queried.
+"""
+type B2BCompanyApprovalConfig {
+  """Whether new company accounts are approved automatically."""
+  isAutoApprovalEnabled: Boolean!
+
+  """Whether company accounts that are pending approval can place orders."""
+  isPendingAccountOrderCreationEnabled: Boolean!
+
+  """
+  Whether company accounts that are pending approval can see products and pricing.
+  """
+  isPendingAccountProductsPricingEnabled: Boolean!
+}
+
 """Per-module B2B configuration toggles."""
 type B2BConfig {
   """
@@ -4619,6 +4635,11 @@ type B2BConfig {
   Which account types shoppers can register for on this storefront channel. Null when the store has no B2B account registration settings, in which case use standard registration. If the settings cannot be retrieved, the field is null and the response includes an UPSTREAM_ERROR.
   """
   accountRegistration: B2BAccountRegistrationConfig
+
+  """
+  How the merchant handles new company account requests. Null when the store has no B2B company approval settings. If the settings cannot be retrieved, the field is null and the response includes an UPSTREAM_ERROR.
+  """
+  companyApproval: B2BCompanyApprovalConfig @deprecated(reason: "Alpha version. Do not use in production.")
 
   """
   The configuration toggles for the quote module, or null if B2B quote settings are unavailable for the store.

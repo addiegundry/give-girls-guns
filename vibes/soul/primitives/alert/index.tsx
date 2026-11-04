@@ -35,6 +35,7 @@ export function Alert({
           info: 'bg-background',
         }[variant],
       )}
+      data-alert-variant={variant}
       role="alert"
     >
       <div className="flex flex-col">

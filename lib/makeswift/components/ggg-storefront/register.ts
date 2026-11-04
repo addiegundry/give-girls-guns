@@ -13,6 +13,7 @@ import {
 
 import {
   BrandAbout,
+  BrandComingSoon,
   BrandFooter,
   BrandHeader,
   BrandHero,
@@ -24,6 +25,7 @@ import {
   BrandValues,
   brandDefaults,
 } from '@/vibes/soul/sections/ggg-storefront';
+import { CategoryHero, CategoryBasicsBanner } from '@/vibes/soul/sections/ggg-storefront/category';
 import { runtime } from '~/lib/makeswift/runtime';
 
 import {
@@ -31,12 +33,74 @@ import {
   MSApparelCollection,
   MSBrandContact,
   MSRangeDayLineup,
+  MSCategoryProducts,
 } from './client';
 import { searchProducts } from '../../utils/search-products';
 
 const style = () => Style();
 const text = (label: string, defaultValue: string) => TextInput({ label, defaultValue });
 const paragraph = (label: string, defaultValue: string) => TextArea({ label, defaultValue });
+
+runtime.registerComponent(CategoryHero, {
+  type: 'ggg-category-hero',
+  label: '3G / Category hero',
+  props: {
+    className: style(),
+    title: text('Heading (blank uses category name)', ''),
+    subtitle: paragraph('Subtitle', 'Get to know the lineup, one box at a time.'),
+    showSeal: Checkbox({ label: 'Show brand seal', defaultValue: true }),
+    sealImage: Image({ label: 'Brand seal (optional)' }),
+    backgroundImage: Image({ label: 'Hero background (optional)' }),
+    showPattern: Checkbox({ label: 'Show monogram edge', defaultValue: true }),
+    patternImage: Image({ label: 'Monogram edge artwork (optional)' }),
+  },
+});
+
+runtime.registerComponent(MSCategoryProducts, {
+  type: 'ggg-category-products',
+  label: '3G / Shop category products',
+  props: {
+    className: style(),
+    buttonText: text('Product button label', 'View Details'),
+    showPrices: Checkbox({ label: 'Show product prices', defaultValue: false }),
+    selectedProducts: List({
+      label: 'Products (empty uses the launch lineup)',
+      type: Group({
+        label: 'Product',
+        props: {
+          displayName: text('Editor label', 'Product'),
+          entityId: Combobox({
+            label: 'BigCommerce product',
+            async getOptions(query) {
+              const products = await searchProducts(query);
+              return products.map((product) => ({
+                id: product.entityId.toString(),
+                label: product.name,
+                value: product.entityId.toString(),
+              }));
+            },
+          }),
+        },
+      }),
+      getItemLabel: (item) => item?.displayName || 'Product',
+    }),
+  },
+});
+
+runtime.registerComponent(CategoryBasicsBanner, {
+  type: 'ggg-category-basics',
+  label: '3G / New to ammo banner',
+  props: {
+    className: style(),
+    title: text('Heading', 'New to ammo?'),
+    description: paragraph('Description', 'Get familiar with the terms you’ll see on every box.'),
+    buttonText: text('Link label', 'Learn the Basics'),
+    buttonLink: Link({ label: 'Destination (defaults to coming soon)' }),
+    showSeal: Checkbox({ label: 'Show brand seal', defaultValue: true }),
+    sealImage: Image({ label: 'Brand seal (optional)' }),
+    backgroundImage: Image({ label: 'Banner background (optional)' }),
+  },
+});
 
 runtime.registerComponent(BrandHeader, {
   type: 'ggg-header',
@@ -250,6 +314,21 @@ runtime.registerComponent(BrandFooter, {
     ),
     showCorner: Checkbox({ label: 'Show decorative corner', defaultValue: true }),
     cornerImage: Image({ label: 'Corner artwork (optional)' }),
+  },
+});
+
+runtime.registerComponent(BrandComingSoon, {
+  type: 'ggg-coming-soon',
+  label: '3G / Coming soon',
+  props: {
+    className: style(),
+    title: text('Heading', 'Coming soon.'),
+    description: paragraph(
+      'Description',
+      'Ammo basics are on the way. In the meantime, explore the collection.',
+    ),
+    buttonText: text('Button label', 'Shop Ammo'),
+    buttonLink: Link({ label: 'Button destination (defaults to shop)' }),
   },
 });
 

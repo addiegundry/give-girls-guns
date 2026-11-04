@@ -1,5 +1,7 @@
 import { clsx } from 'clsx';
 
+import { CategoryCard } from '@/vibes/soul/sections/ggg-storefront/category';
+
 import { Stream, Streamable } from '@/vibes/soul/lib/streamable';
 import { CompareDrawer, CompareDrawerProvider } from '@/vibes/soul/primitives/compare-drawer';
 import {
@@ -10,6 +12,8 @@ import {
 import * as Skeleton from '@/vibes/soul/primitives/skeleton';
 
 interface ProductListProps {
+  cardStyle?: 'default' | 'category';
+  productButtonText?: string;
   products: Streamable<Product[]>;
   showRating?: boolean;
   compareProducts?: Streamable<Product[]>;
@@ -45,6 +49,8 @@ interface ProductListProps {
  * ```
  */
 export function ProductList({
+  cardStyle = 'default',
+  productButtonText,
   products: streamableProducts,
   showRating,
   className,
@@ -100,19 +106,30 @@ export function ProductList({
           >
             <div className={clsx('w-full @container', className)}>
               <div className="mx-auto grid grid-cols-1 gap-x-4 gap-y-6 @sm:grid-cols-2 @2xl:grid-cols-3 @2xl:gap-x-5 @2xl:gap-y-8 @5xl:grid-cols-4 @7xl:grid-cols-5">
-                {products.map((product) => (
-                  <ProductCard
-                    aspectRatio={aspectRatio}
-                    colorScheme={colorScheme}
-                    compareLabel={compareLabel}
-                    compareParamName={compareParamName}
-                    imageSizes="(min-width: 80rem) 20vw, (min-width: 64rem) 25vw, (min-width: 42rem) 33vw, (min-width: 24rem) 50vw, 100vw"
-                    key={product.id}
-                    product={product}
-                    showCompare={showCompare}
-                    showRating={showRating}
-                  />
-                ))}
+                {products.map((product) =>
+                  cardStyle === 'category' ? (
+                    <CategoryCard
+                      buttonText={productButtonText}
+                      compareLabel={compareLabel}
+                      compareParamName={compareParamName}
+                      key={product.id}
+                      product={product}
+                      showCompare={showCompare}
+                    />
+                  ) : (
+                    <ProductCard
+                      aspectRatio={aspectRatio}
+                      colorScheme={colorScheme}
+                      compareLabel={compareLabel}
+                      compareParamName={compareParamName}
+                      imageSizes="(min-width: 80rem) 20vw, (min-width: 64rem) 25vw, (min-width: 42rem) 33vw, (min-width: 24rem) 50vw, 100vw"
+                      key={product.id}
+                      product={product}
+                      showCompare={showCompare}
+                      showRating={showRating}
+                    />
+                  ),
+                )}
               </div>
             </div>
             {showCompare && compareProducts.length > 0 && (

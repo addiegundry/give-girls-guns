@@ -16,6 +16,8 @@ import {
 } from '@/vibes/soul/sections/products-list-section/sorting';
 
 interface Props {
+  appearance?: 'default' | 'category';
+  productButtonText?: string;
   breadcrumbs?: Streamable<Breadcrumb[]>;
   title?: Streamable<string | null>;
   totalCount: Streamable<string>;
@@ -46,6 +48,8 @@ interface Props {
 }
 
 export function ProductsListSection({
+  appearance = 'default',
+  productButtonText,
   breadcrumbs: streamableBreadcrumbs,
   title = 'Products',
   totalCount,
@@ -75,7 +79,9 @@ export function ProductsListSection({
   maxCompareLimitMessage,
 }: Props) {
   return (
-    <div className="group/products-list-section @container">
+    <div
+      className={`group/products-list-section @container ${appearance === 'category' ? 'ggg-category-listing' : ''}`}
+    >
       <div className="mx-auto max-w-screen-2xl px-4 py-10 @xl:px-6 @xl:py-14 @4xl:px-8 @4xl:py-12">
         <div>
           <Stream fallback={<BreadcrumbsSkeleton />} value={streamableBreadcrumbs}>
@@ -83,23 +89,35 @@ export function ProductsListSection({
               breadcrumbs && breadcrumbs.length > 1 && <Breadcrumbs breadcrumbs={breadcrumbs} />
             }
           </Stream>
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-8 pt-6 text-foreground">
-            <h1 className="flex items-center gap-2 font-heading text-3xl font-medium leading-none @lg:text-4xl @2xl:text-5xl">
-              <Suspense
-                fallback={
-                  <span className="inline-flex h-[1lh] w-[6ch] animate-pulse rounded-lg bg-contrast-100" />
-                }
-              >
-                {title}
-              </Suspense>
-              <Suspense
-                fallback={
-                  <span className="inline-flex h-[1lh] w-[2ch] animate-pulse rounded-lg bg-contrast-100" />
-                }
-              >
-                <span className="text-contrast-300">{totalCount}</span>
-              </Suspense>
-            </h1>
+          <div className="products-list-toolbar flex flex-wrap items-center justify-between gap-4 pb-8 pt-6 text-foreground">
+            {appearance === 'category' ? (
+              <p aria-live="polite" className="ggg-category-count">
+                <Stream fallback="Loading products…" value={totalCount}>
+                  {(count) => (
+                    <>
+                      {count} {count === '1' ? 'product' : 'products'}
+                    </>
+                  )}
+                </Stream>
+              </p>
+            ) : (
+              <h1 className="flex items-center gap-2 font-heading text-3xl font-medium leading-none @lg:text-4xl @2xl:text-5xl">
+                <Suspense
+                  fallback={
+                    <span className="inline-flex h-[1lh] w-[6ch] animate-pulse rounded-lg bg-contrast-100" />
+                  }
+                >
+                  {title}
+                </Suspense>
+                <Suspense
+                  fallback={
+                    <span className="inline-flex h-[1lh] w-[2ch] animate-pulse rounded-lg bg-contrast-100" />
+                  }
+                >
+                  <span className="text-contrast-300">{totalCount}</span>
+                </Suspense>
+              </h1>
+            )}
             <div className="flex gap-2">
               <Stream
                 fallback={<SortingSkeleton />}
@@ -119,49 +137,65 @@ export function ProductsListSection({
                   />
                 )}
               </Stream>
-              <div className="block @3xl:hidden">
-                <SidePanel.Root>
-                  <SidePanel.Trigger asChild>
-                    <Button size="medium" variant="secondary">
-                      {filterLabel}
-                      <span className="hidden @xl:block">
-                        <Sliders size={20} />
-                      </span>
-                    </Button>
-                  </SidePanel.Trigger>
-                  <Stream value={streamableFiltersPanelTitle}>
-                    {(filtersPanelTitle) => (
-                      <SidePanel.Content title={filtersPanelTitle}>
-                        <FiltersPanel
-                          filters={filters}
-                          paginationInfo={paginationInfo}
-                          rangeFilterApplyLabel={rangeFilterApplyLabel}
-                          resetFiltersLabel={resetFiltersLabel}
-                        />
-                      </SidePanel.Content>
-                    )}
-                  </Stream>
-                </SidePanel.Root>
-              </div>
+              <Stream fallback={null} value={filters}>
+                {(availableFilters) =>
+                  (appearance !== 'category' || availableFilters.length > 0) && (
+                    <div className={appearance === 'category' ? 'block' : 'block @3xl:hidden'}>
+                      <SidePanel.Root>
+                        <SidePanel.Trigger asChild>
+                          <Button size="medium" variant="secondary">
+                            {filterLabel}
+                            <span className="hidden @xl:block">
+                              <Sliders size={20} />
+                            </span>
+                          </Button>
+                        </SidePanel.Trigger>
+                        <Stream value={streamableFiltersPanelTitle}>
+                          {(filtersPanelTitle) => (
+                            <SidePanel.Content title={filtersPanelTitle}>
+                              <FiltersPanel
+                                className={
+                                  appearance === 'category'
+                                    ? 'ggg-category-filter-panel'
+                                    : undefined
+                                }
+                                filters={availableFilters}
+                                paginationInfo={paginationInfo}
+                                rangeFilterApplyLabel={rangeFilterApplyLabel}
+                                resetFiltersLabel={resetFiltersLabel}
+                              />
+                            </SidePanel.Content>
+                          )}
+                        </Stream>
+                      </SidePanel.Root>
+                    </div>
+                  )
+                }
+              </Stream>
             </div>
           </div>
         </div>
         <div className="flex items-stretch gap-8 @4xl:gap-10">
-          <aside className="hidden w-52 @3xl:block @4xl:w-60">
-            <Stream value={streamableFiltersPanelTitle}>
-              {(filtersPanelTitle) => <h2 className="sr-only">{filtersPanelTitle}</h2>}
-            </Stream>
-            <FiltersPanel
-              className="sticky top-4"
-              filters={filters}
-              paginationInfo={paginationInfo}
-              rangeFilterApplyLabel={rangeFilterApplyLabel}
-              resetFiltersLabel={resetFiltersLabel}
-            />
-          </aside>
+          {appearance !== 'category' && (
+            <aside className="hidden w-52 @3xl:block @4xl:w-60">
+              <Stream value={streamableFiltersPanelTitle}>
+                {(filtersPanelTitle) => <h2 className="sr-only">{filtersPanelTitle}</h2>}
+              </Stream>
+              <FiltersPanel
+                className="sticky top-4"
+                filters={filters}
+                paginationInfo={paginationInfo}
+                rangeFilterApplyLabel={rangeFilterApplyLabel}
+                resetFiltersLabel={resetFiltersLabel}
+              />
+            </aside>
+          )}
 
           <div className="group-has-data-pending/products-list-section:animate-pulse flex-1">
             <ProductList
+              cardStyle={appearance === 'category' ? 'category' : 'default'}
+              className={appearance === 'category' ? 'ggg-category-product-list' : undefined}
+              productButtonText={productButtonText}
               compareHref={compareHref}
               compareLabel={compareLabel}
               compareParamName={compareParamName}
@@ -177,7 +211,16 @@ export function ProductsListSection({
               showRating={showRating}
             />
 
-            {paginationInfo && <CursorPagination info={paginationInfo} />}
+            {paginationInfo &&
+              (appearance === 'category' ? (
+                <Stream fallback={null} value={paginationInfo}>
+                  {(info) =>
+                    info.startCursor || info.endCursor ? <CursorPagination info={info} /> : null
+                  }
+                </Stream>
+              ) : (
+                <CursorPagination info={paginationInfo} />
+              ))}
           </div>
         </div>
       </div>

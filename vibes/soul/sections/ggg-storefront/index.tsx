@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 import { PriceLabel } from '@/vibes/soul/primitives/price-label';
 import { Product } from '@/vibes/soul/primitives/product-card';
+import { CartCountBadge } from '~/components/ggg-storefront/cart-count';
 import { Image } from '~/components/image';
 import { Link } from '~/components/link';
 import { useRouter } from '~/i18n/routing';
@@ -154,8 +155,9 @@ export function BrandHeader({
             )}
           </button>
           <Link
+            aria-describedby="ggg-cart-count"
             aria-label="Shopping bag"
-            className="ggg-landing-icon"
+            className="ggg-landing-icon ggg-bag-link"
             href="/cart"
             onClick={() => {
               setOpen(false);
@@ -163,6 +165,7 @@ export function BrandHeader({
             }}
           >
             <Image alt="" height={30} src="/ggg/landing/icon-bag.svg" width={30} />
+            <CartCountBadge />
           </Link>
           <button
             aria-controls={menuId}
@@ -562,6 +565,33 @@ export function BrandValues({
 }
 
 export { BrandNewsletter, BrandFooter, RangeDayFeature } from './landing-closing';
+
+export function BrandComingSoon({
+  title = 'Coming soon.',
+  description = 'Ammo basics are on the way. In the meantime, explore the collection.',
+  buttonText = 'Shop Ammo',
+  buttonLink,
+  className,
+}: EditableProps & {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  buttonLink?: EditableLink;
+}) {
+  return (
+    <section className={`ggg-coming-soon ${className ?? ''}`}>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <Link
+        className="ggg-landing-hero-button"
+        href={linkDestination(buttonLink, '/shop')}
+        target={buttonLink?.target}
+      >
+        {buttonText}
+      </Link>
+    </section>
+  );
+}
 
 export function BrandPageIntro({
   title = 'Wear your confidence.',

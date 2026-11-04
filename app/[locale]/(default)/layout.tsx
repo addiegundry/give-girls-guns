@@ -5,8 +5,10 @@ import '@/vibes/soul/sections/ggg-storefront/styles.css';
 import '@/vibes/soul/sections/ggg-storefront/landing-header-hero.css';
 import '@/vibes/soul/sections/ggg-storefront/landing-lineup.css';
 import '@/vibes/soul/sections/ggg-storefront/landing-closing.css';
+import '@/vibes/soul/sections/ggg-storefront/category.css';
+import '@/vibes/soul/sections/ggg-storefront/cart.css';
 
-import { BrandSection } from '~/components/ggg-storefront';
+import { BrandSection, CartCountData } from '~/components/ggg-storefront';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ locale: string }>;
@@ -19,7 +21,9 @@ export default async function DefaultLayout({ params, children }: Props) {
 
   return (
     <div className="ggg-storefront">
-      <BrandSection label="3G · Navigation" name="header" />
+      <CartCountData>
+        <BrandSection label="3G · Navigation" name="header" />
+      </CartCountData>
 
       <main className="ggg-main-content" id="main-content">
         {children}

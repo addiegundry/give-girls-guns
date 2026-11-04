@@ -1,0 +1,134 @@
+/* Live bag quantity, shared by desktop and mobile navigation. */
+.ggg-bag-link {
+  position: relative;
+}
+
+.ggg-cart-count {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  display: grid;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 5px;
+  place-items: center;
+  border: 2px solid #f7f1fc;
+  border-radius: 999px;
+  background: #fa2b9c;
+  color: #fff;
+  font:
+    700 11px/1 'GGG Goodly',
+    sans-serif;
+}
+
+/* Keep the existing cart controls and checkout flow, with the storefront palette. */
+.ggg-cart-page {
+  --foreground: 287 71% 26%;
+  --primary: 287 71% 26%;
+  --background: 276 65% 97%;
+  --contrast-100: 281 38% 88%;
+  --contrast-200: 281 28% 72%;
+  --contrast-300: 281 21% 49%;
+  --contrast-400: 281 25% 39%;
+  --contrast-500: 281 28% 34%;
+  --cart-font-family: 'GGG Goodly', sans-serif;
+  --cart-title-font-family: 'GGG Picky Retro', Georgia, serif;
+  --cart-text: #601372;
+  --price-light-text: #601372;
+  --price-light-sale-text: #fa2b9c;
+  --cart-title: #612675;
+  --cart-subtitle: #6e5084;
+  --cart-subtitle-text: #6e5084;
+  --cart-subtext-text: #6e5084;
+  --cart-focus: #fa2b9c;
+  --cart-border: #dcc8e8;
+  --cart-image-background: #f5eafa;
+  --cart-icon: #6e5084;
+  --cart-icon-hover: #fa2b9c;
+  --cart-button-background: #efdef7;
+  --cart-counter-icon: #601372;
+  --cart-counter-icon-hover: #fa2b9c;
+  --cart-counter-background: #fff;
+  --cart-counter-background-hover: #f4e4fb;
+  --button-font-family: 'GGG Goodly', sans-serif;
+  --button-primary-background: #ff3d24;
+  --button-primary-background-hover: #df2d19;
+  --button-primary-border: #ff9985;
+  --button-primary-text: #fff;
+  --button-secondary-background: #601372;
+  --button-secondary-background-hover: #7d3290;
+  --button-secondary-text: #fff;
+  --button-secondary-border: #601372;
+  --button-ghost-text: #601372;
+  --button-focus: #fa2b9c;
+  --font-family-body: 'GGG Goodly', sans-serif;
+  --font-family-heading: 'GGG Picky Retro', Georgia, serif;
+  min-height: 50vh;
+  background: #f7f1fc url('/ggg/landing/background-page.png') center top / cover;
+  color: #601372;
+  font-family: var(--cart-font-family);
+}
+
+.ggg-storefront .ggg-cart-page :is(h1, h2) {
+  margin-bottom: 28px;
+  color: #612675;
+  font-family: var(--cart-title-font-family);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.ggg-cart-page [data-cart-summary] {
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid #dcc8e8;
+  border-radius: 24px;
+  background: #fff9ff;
+  box-shadow: 0 6px 24px #60137208;
+}
+
+.ggg-cart-page [data-cart-line-item] {
+  padding: 20px;
+  border: 1px solid #e7d6ee;
+  border-radius: 20px;
+  background: #fff9ff;
+}
+
+.ggg-cart-page [data-cart-line-item] img {
+  object-fit: contain;
+}
+
+.ggg-cart-page input,
+.ggg-cart-page select {
+  background-color: #fff;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+}
+
+.ggg-storefront .ggg-cart-page p {
+  margin-bottom: 24px;
+}
+
+/* Sonner renders outside the storefront wrapper. */
+[data-sonner-toaster] [data-alert-variant='success'] {
+  --foreground: 287 71% 26%;
+  --contrast-400: 281 25% 39%;
+  --button-ghost-text: #601372;
+  --button-ghost-background-hover: #ecd9f5;
+  --button-focus: #fa2b9c;
+  border: 1px solid #d8b7e7;
+  border-left: 4px solid #fa2b9c;
+  background: #f5eafa;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+  box-shadow: 0 6px 24px #6013721a;
+}
+
+@media (max-width: 480px) {
+  .ggg-cart-page [data-cart-line-item] {
+    padding: 16px;
+  }
+}
+
+.ggg-cart-page .mix-blend-difference {
+  mix-blend-mode: normal;
+}

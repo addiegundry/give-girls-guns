@@ -9,6 +9,7 @@ import { Stream, Streamable } from '@/vibes/soul/lib/streamable';
 import { createCompareLoader } from '@/vibes/soul/primitives/compare-drawer/loader';
 import { ProductsListSection } from '@/vibes/soul/sections/products-list-section';
 import { getFilterParsers } from '@/vibes/soul/sections/products-list-section/filter-parsers';
+import { CategoryHeroRegion, BrandSection } from '~/components/ggg-storefront';
 import { getSessionCustomerAccessToken } from '~/auth';
 import { facetsTransformer } from '~/data-transformers/facets-transformer';
 import { pageInfoTransformer } from '~/data-transformers/page-info-transformer';
@@ -266,13 +267,19 @@ export default async function Category(props: Props) {
   });
 
   return (
-    <>
+    <div className="ggg-category-page">
+      <CategoryHeroRegion
+        breadcrumbs={breadcrumbs}
+        instance={`category-${categoryId}`}
+        title={category.name}
+      />
       <Slot
+        fallback={null}
         label={`${category.name} top content`}
         snapshotId={`category-${categoryId}-top-content`}
       />
       <ProductsListSection
-        breadcrumbs={breadcrumbs}
+        appearance="category"
         compareLabel={t('Compare.compare')}
         compareProducts={streamableCompareProducts}
         emptyStateSubtitle={t('Category.Empty.subtitle')}
@@ -306,7 +313,13 @@ export default async function Category(props: Props) {
         title={category.name}
         totalCount={streamableTotalCount}
       />
+      <BrandSection
+        instance={`category-${categoryId}-basics`}
+        label={`${category.name} · New to ammo`}
+        name="category-basics"
+      />
       <Slot
+        fallback={null}
         label={`${category.name} bottom content`}
         snapshotId={`category-${categoryId}-bottom-content`}
       />
@@ -319,6 +332,6 @@ export default async function Category(props: Props) {
           />
         )}
       </Stream>
-    </>
+    </div>
   );
 }

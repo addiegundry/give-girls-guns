@@ -1,3 +1,35 @@
+.ggg-coming-soon {
+  display: flex;
+  min-height: 50vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 64px 24px;
+  background: #f4cde5 url('/ggg/landing/background-hero-gradient.png') center / cover;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+  text-align: center;
+}
+
+.ggg-storefront .ggg-coming-soon h1 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(42px, 8vw, 90px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.ggg-coming-soon p {
+  max-width: 560px;
+  font-size: clamp(18px, 2vw, 24px);
+}
+
+.ggg-coming-soon .ggg-landing-hero-button {
+  width: min(100%, 280px);
+  margin-top: 0;
+}
+
 .ggg-range-day,
 .ggg-landing-newsletter,
 .ggg-landing-footer {

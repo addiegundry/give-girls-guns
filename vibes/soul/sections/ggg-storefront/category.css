@@ -1,0 +1,436 @@
+.ggg-category-page,
+.ggg-category-filter-panel {
+  --foreground: 285 71% 26%;
+  --primary: 285 71% 26%;
+  --font-family-body: 'GGG Goodly', sans-serif;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+}
+
+.ggg-category-page {
+  background: #f7f1fc url('/ggg/landing/background-page.png') center / cover;
+}
+
+.ggg-category-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-height: 80px;
+  padding: 20px 5.2% 28px;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ggg-category-breadcrumbs a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ggg-category-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ggg-category-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(240px, 24vw, 370px);
+  padding: 36px 8%;
+  background: #f5cee8 url('/ggg/landing/background-hero-gradient.png') center / cover;
+  text-align: center;
+}
+
+.ggg-category-hero-with-seal {
+  padding-top: 80px;
+}
+
+.ggg-category-hero-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1100px;
+  overflow-wrap: anywhere;
+}
+
+.ggg-storefront .ggg-category-hero h1 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(48px, 10.6vw, 144px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.ggg-storefront .ggg-category-hero p {
+  margin-top: 12px;
+  font-size: clamp(20px, 2.5vw, 34px);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.ggg-category-hero-seal {
+  position: absolute;
+  z-index: 2;
+  top: -84px;
+  left: 50%;
+  width: 220px;
+  height: auto;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ggg-category-hero-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24%;
+  height: auto;
+  pointer-events: none;
+}
+
+.ggg-category-hero-pattern {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0 auto;
+  width: 14%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ggg-category-hero-pattern img {
+  object-fit: cover;
+  object-position: right center;
+  transform: scale(2.4);
+  transform-origin: right center;
+}
+
+.ggg-category-shop-products,
+.ggg-category-listing > div {
+  max-width: 1500px;
+  margin-inline: auto;
+  padding: 22px 2.1% 40px;
+}
+
+.ggg-category-count {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.ggg-category-shop-products .ggg-category-count {
+  margin: 0 6px 24px;
+}
+
+.ggg-category-card-grid,
+.ggg-category-product-list > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+}
+
+.ggg-category-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  background: linear-gradient(150deg, #fff6fd, #f0e3fc);
+}
+
+.ggg-category-card-image {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1.14;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #e3c9e8 url('/ggg/landing/background-product-gradient.png') center / cover;
+}
+
+.ggg-category-card-image img {
+  object-fit: contain;
+  padding: 20px;
+  mix-blend-mode: multiply;
+  transition: transform 200ms ease;
+}
+
+.ggg-category-card-image:hover img {
+  transform: scale(1.025);
+}
+
+.ggg-category-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px 22px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.ggg-storefront .ggg-category-card h2 {
+  font-family: 'GGG Goodly', sans-serif;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: initial;
+}
+
+.ggg-category-card h2 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ggg-category-card-subtitle {
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.4;
+}
+
+.ggg-category-card-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  min-height: 48px;
+  margin-top: auto;
+  padding: 8px 12px;
+  border: 1px solid #ff9985;
+  border-radius: 13px;
+  background: linear-gradient(110deg, #ff4028, #fa321c);
+  color: #fff;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ggg-category-card-copy > p:last-of-type {
+  margin-bottom: 14px;
+}
+
+.ggg-category-card-button:hover {
+  background: #df2918;
+}
+
+.ggg-category-card-skeleton {
+  aspect-ratio: 0.74;
+  border-radius: 15px;
+  background: linear-gradient(150deg, #e3c9e8, #f0e3fc);
+}
+
+.ggg-category-empty {
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.ggg-category-empty p {
+  margin-block: 16px;
+}
+
+.ggg-category-empty a {
+  text-decoration: underline;
+}
+
+.ggg-category-listing .products-list-toolbar {
+  padding-top: 0;
+  padding-bottom: 24px;
+}
+
+.ggg-category-listing .flex-1 {
+  min-width: 0;
+}
+
+.ggg-category-listing .products-list-toolbar button {
+  min-height: 44px;
+  border-radius: 10px;
+  font-family: 'GGG Goodly', sans-serif;
+}
+
+.ggg-category-basics {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: clamp(150px, 15vw, 190px);
+  overflow: hidden;
+  padding: 12px 4% 12px 2%;
+  background: #f7d6ef url('/ggg/landing/background-hero-gradient.png') center / cover;
+}
+
+.ggg-category-basics-seal {
+  flex-shrink: 0;
+  width: 180px;
+  height: auto;
+  margin-block: -28px;
+}
+
+.ggg-category-basics-copy {
+  flex: 1;
+  min-width: 0;
+  padding-left: 36px;
+  border-left: 1px solid #96568f;
+}
+
+.ggg-storefront .ggg-category-basics h2 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(34px, 5vw, 64px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.ggg-storefront .ggg-category-basics p {
+  margin-top: 10px;
+  font-size: clamp(17px, 1.8vw, 24px);
+  line-height: 1.35;
+}
+
+.ggg-category-basics > a {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+  min-height: 48px;
+  font-size: clamp(18px, 2.1vw, 28px);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+}
+
+.ggg-category-basics > a:hover {
+  color: #8f258e;
+}
+
+.ggg-category-basics-corner {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  width: 15%;
+  height: auto;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .ggg-category-card-grid,
+  .ggg-category-product-list > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ggg-category-basics {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px 20px;
+    padding: 20px;
+  }
+
+  .ggg-category-basics-seal {
+    width: 140px;
+  }
+
+  .ggg-category-basics-copy {
+    padding-left: 24px;
+  }
+
+  .ggg-category-basics > a {
+    margin-left: 184px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ggg-category-breadcrumbs {
+    min-height: 74px;
+    padding: 16px 20px 28px;
+    font-size: 16px;
+  }
+
+  .ggg-category-hero {
+    padding: 65px 24px 32px;
+  }
+
+  .ggg-category-hero-seal {
+    top: -62px;
+    width: 160px;
+  }
+
+  .ggg-category-hero-corner {
+    width: 130px;
+  }
+
+  .ggg-category-hero-pattern {
+    width: 17%;
+    opacity: 0.3;
+  }
+
+  .ggg-storefront .ggg-category-hero h1 {
+    font-size: clamp(42px, 12vw, 70px);
+  }
+
+  .ggg-storefront .ggg-category-hero p {
+    font-size: 20px;
+  }
+
+  .ggg-category-shop-products,
+  .ggg-category-listing > div {
+    padding: 24px 20px 32px;
+  }
+
+  .ggg-category-card-grid,
+  .ggg-category-product-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .ggg-category-card-copy {
+    padding-inline: 16px;
+  }
+
+  .ggg-storefront .ggg-category-card h2 {
+    font-size: 24px;
+  }
+
+  .ggg-category-card-subtitle {
+    font-size: 18px;
+  }
+
+  .ggg-category-card-button {
+    font-size: 24px;
+  }
+
+  .ggg-category-basics-seal {
+    width: 100px;
+    margin: -18px -12px -18px -18px;
+  }
+
+  .ggg-category-basics-copy {
+    padding-left: 18px;
+  }
+
+  .ggg-category-basics > a {
+    margin-inline: auto;
+    font-size: 19px;
+  }
+
+  .ggg-category-basics-corner {
+    width: 130px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ggg-category-card-image img {
+    transition: none;
+  }
+}

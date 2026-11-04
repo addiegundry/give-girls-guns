@@ -482,7 +482,7 @@ export function CartClient<LineItem extends CartLineItem>({
     <StickySidebarLayout
       className="font-[family-name:var(--cart-font-family,var(--font-family-body))] text-[var(--cart-text,hsl(var(--foreground)))]"
       sidebar={
-        <div>
+        <div data-cart-summary>
           <h2 className="mb-10 font-[family-name:var(--cart-title-font-family,var(--font-family-heading))] text-4xl font-medium leading-none @xl:text-5xl">
             {summaryTitle}
           </h2>
@@ -586,6 +586,7 @@ export function CartClient<LineItem extends CartLineItem>({
           {displayLineItems.map((lineItem) => (
             <li
               className="flex flex-col items-start gap-x-5 gap-y-4 @container @sm:flex-row"
+              data-cart-line-item
               key={lineItem.id}
             >
               <div className="relative aspect-square w-full max-w-24 overflow-hidden rounded-xl bg-[var(--cart-image-background,hsl(var(--contrast-100)))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cart-focus,hsl(var(--primary)))] focus-visible:ring-offset-4">

@@ -4,6 +4,7 @@ import { createContext, ReactNode, useContext } from 'react';
 
 import { Product } from '@/vibes/soul/primitives/product-card';
 import { ApparelCollection, BrandContact } from '@/vibes/soul/sections/ggg-storefront';
+import { CategoryProductGrid } from '@/vibes/soul/sections/ggg-storefront/category';
 import { useProducts } from '~/lib/makeswift/utils/use-products';
 import {
   APPAREL_PRODUCT_IDS,
@@ -68,6 +69,44 @@ export function MSRangeDayLineup({
       loading={!useInitialProducts && isLoading}
       products={orderedProducts}
     />
+  );
+}
+
+export function MSCategoryProducts({
+  selectedProducts = [],
+  buttonText,
+  showPrices = false,
+  className,
+}: {
+  selectedProducts?: LineupSelection[];
+  buttonText?: string;
+  showPrices?: boolean;
+  className?: string;
+}) {
+  const initialProducts = useContext(LineupContext);
+  const chosen = selectedProducts.filter(({ entityId }) => entityId);
+  const selection = chosen.length ? chosen : DEFAULT_LINEUP_PRODUCTS;
+  const useInitial = !chosen.length && initialProducts !== null;
+  const { products, isLoading } = useProducts({
+    collection: 'none',
+    additionalProductIds: useInitial
+      ? []
+      : selection.flatMap(({ entityId }) => (entityId ? [entityId] : [])),
+  });
+  const catalog = useInitial ? initialProducts : products;
+  const ordered = selection.flatMap(
+    ({ entityId }) => catalog?.filter(({ id }) => id === entityId) ?? [],
+  );
+
+  return (
+    <div className={className}>
+      <CategoryProductGrid
+        buttonText={buttonText}
+        loading={!useInitial && isLoading}
+        products={ordered}
+        showPrices={showPrices}
+      />
+    </div>
   );
 }
 

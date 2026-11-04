@@ -5,9 +5,9 @@ import { Streamable } from '@/vibes/soul/lib/streamable';
 import { GetLinksAndSectionsQuery, LayoutQuery } from '~/app/[locale]/(default)/page-data';
 import { getSessionCustomerAccessToken } from '~/auth';
 import { client } from '~/client';
-import { graphql, readFragment } from '~/client/graphql';
+import { readFragment } from '~/client/graphql';
+import { getCartCount } from '~/client/queries/get-cart-count';
 import { revalidate } from '~/client/revalidate-target';
-import { TAGS } from '~/client/tags';
 import { logoTransformer } from '~/data-transformers/logo-transformer';
 import { getLocaleRouting } from '~/i18n/locale-config';
 import { getCartId } from '~/lib/cart';
@@ -18,35 +18,6 @@ import { search } from './_actions/search';
 import { switchCurrency } from './_actions/switch-currency';
 import { switchLocale } from './_actions/switch-locale';
 import { CurrencyCode, HeaderFragment, HeaderLinksFragment } from './fragment';
-
-const GetCartCountQuery = graphql(`
-  query GetCartCountQuery($cartId: String) {
-    site {
-      cart(entityId: $cartId) {
-        entityId
-        lineItems {
-          totalQuantity
-        }
-      }
-    }
-  }
-`);
-
-const getCartCount = cache(async (cartId: string, customerAccessToken?: string) => {
-  const response = await client.fetch({
-    document: GetCartCountQuery,
-    variables: { cartId },
-    customerAccessToken,
-    fetchOptions: {
-      cache: 'no-store',
-      next: {
-        tags: [TAGS.cart],
-      },
-    },
-  });
-
-  return response.data.site.cart?.lineItems.totalQuantity ?? null;
-});
 
 const getHeaderLinks = cache(async (customerAccessToken?: string, currencyCode?: CurrencyCode) => {
   const { data: response } = await client.fetch({
