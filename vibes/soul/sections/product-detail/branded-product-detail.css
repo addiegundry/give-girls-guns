@@ -1,0 +1,691 @@
+.ggg-pdp {
+  --price-light-text: #601372;
+  --number-input-light-text: #601372;
+  --number-input-light-icon: #601372;
+  --number-input-light-border: #c7a2db;
+  --number-input-light-background: #f7f1fc;
+  --product-gallery-image-background: transparent;
+  --product-gallery-image-border-active: #fa2b9c;
+  --product-gallery-focus: #fa2b9c;
+  --radio-group-light-indicator-background: #fa2b9c;
+  --favorite-icon: #601372;
+  --favorite-border: transparent;
+  --button-primary-background: #ff3d24;
+  --button-primary-background-hover: #df2918;
+  --button-primary-border: #ff9985;
+  --button-primary-text: #fff;
+  --button-font-family: 'GGG Goodly', sans-serif;
+  color: #601372;
+  background: #f7f1fc url('/ggg/landing/background-page.png') center / cover;
+  font-family: 'GGG Goodly', sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.ggg-pdp-product {
+  position: relative;
+  isolation: isolate;
+  max-width: 1500px;
+  margin-inline: auto;
+  padding: 26px 2.7% 30px;
+}
+
+.ggg-pdp-top-corner {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 125px;
+  height: auto;
+  pointer-events: none;
+}
+
+.ggg-pdp-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 4px 0 20px;
+  padding-left: 3.5%;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ggg-pdp-breadcrumbs a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ggg-pdp-product-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 3.3vw, 48px);
+}
+
+.ggg-pdp-gallery {
+  min-width: 0;
+}
+
+.ggg-pdp-gallery > div {
+  position: static;
+  gap: 14px;
+}
+
+.ggg-pdp .product-gallery-main,
+.ggg-pdp-missing-image {
+  border-radius: 24px;
+  background: #e7c6e6 url('/ggg/landing/background-product-gradient.png') center / cover;
+}
+
+.ggg-pdp .product-gallery-slide {
+  aspect-ratio: 1.12;
+  background: #e7c6e6 url('/ggg/landing/background-product-gradient.png') center / cover;
+}
+
+.ggg-pdp .product-gallery-slide img {
+  padding: 24px;
+  mix-blend-mode: multiply;
+}
+
+.ggg-pdp .product-gallery-thumbnails button {
+  width: calc((100% - 24px) / 3);
+  height: auto;
+  aspect-ratio: 1.2;
+  border-width: 2px;
+  border-radius: 14px;
+  background: #e7c6e6 url('/ggg/landing/background-product-gradient.png') center / cover;
+}
+
+.ggg-pdp .product-gallery-thumbnails img {
+  object-fit: contain;
+  padding: 8px;
+  mix-blend-mode: multiply;
+}
+
+.ggg-pdp .product-gallery-thumbnails button > div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.ggg-pdp-single-image .product-gallery-thumbnails {
+  display: none;
+}
+
+.ggg-pdp-missing-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  aspect-ratio: 1.12;
+}
+
+.ggg-pdp-purchase {
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.ggg-pdp-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 4px 22px;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #83488e, #6b3381);
+  color: #fff;
+  font-size: clamp(14px, 1.8vw, 22px);
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.ggg-storefront .ggg-pdp h1 {
+  margin: 0 0 16px;
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(36px, 4.9vw, 68px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.94;
+  text-wrap: initial;
+}
+
+.ggg-storefront .ggg-pdp-product-name {
+  margin-bottom: 6px;
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ggg-pdp-summary {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.ggg-pdp-price {
+  margin: 14px 0 22px;
+}
+
+.ggg-pdp-price > span {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(32px, 4.3vw, 58px);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.ggg-pdp-price abbr,
+.ggg-pdp-price del {
+  font-family: 'GGG Goodly', sans-serif;
+  font-size: 0.5em;
+}
+
+.ggg-pdp-promotion {
+  margin-block: 12px !important;
+  padding: 12px;
+  border: 1px solid #d3b2e2;
+  border-radius: 10px;
+}
+
+.ggg-pdp-form form > div {
+  padding-bottom: 0;
+}
+
+.ggg-pdp-form label {
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+}
+
+.ggg-pdp-form [role='radiogroup'] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ggg-pdp-form [role='radiogroup'] > div {
+  position: relative;
+  gap: 10px;
+  min-height: 58px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #c7a2db;
+  border-radius: 12px;
+}
+
+.ggg-pdp-form [role='radiogroup'] > div:has([data-state='checked']) {
+  border: 2px solid #fa2b9c;
+  background: #fbe4f4;
+  padding: 11px;
+}
+
+.ggg-pdp-form [role='radiogroup'] label {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ggg-pdp-form [role='radio'] {
+  flex-shrink: 0;
+}
+
+.ggg-pdp-form select,
+.ggg-pdp-form input:not([type='hidden']),
+.ggg-pdp-form textarea {
+  max-width: 100%;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+  font-size: 16px;
+}
+
+.ggg-pdp .product-detail-stock {
+  height: auto;
+  margin-block: 16px;
+  font-size: 14px;
+}
+
+.ggg-pdp .product-detail-stock:empty {
+  display: none;
+}
+
+.ggg-pdp .product-detail-stock > div {
+  transform: none;
+}
+
+.ggg-pdp .product-detail-stock .whitespace-nowrap {
+  white-space: normal;
+}
+
+.ggg-pdp .product-detail-purchase-actions {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.45fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.ggg-pdp .product-detail-quantity > div {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+}
+
+.ggg-pdp .product-detail-quantity input {
+  flex: 1;
+  width: 32px;
+  min-width: 0;
+  padding-inline: 0;
+  text-align: center;
+}
+
+.ggg-pdp .product-detail-quantity button {
+  flex-shrink: 0;
+  min-width: 30px;
+  min-height: 48px;
+}
+
+.ggg-pdp .product-detail-purchase-actions > button {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 14px;
+  background: #ff3d24;
+  color: #fff;
+}
+
+.ggg-pdp .product-detail-purchase-actions > button > span:first-child {
+  min-width: 0;
+  padding: 8px 12px;
+  font-family: 'GGG Goodly', sans-serif;
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ggg-pdp-save button {
+  justify-content: flex-start;
+  gap: 10px;
+  width: auto;
+  min-height: 44px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-weight: 700;
+}
+
+.ggg-pdp-save button span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ggg-pdp-shipping-link,
+.ggg-pdp-reviews-link {
+  display: block;
+  min-height: 44px;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ggg-pdp-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.ggg-pdp-highlights > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 62px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #efe0f7;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ggg-pdp-highlights svg {
+  flex-shrink: 0;
+}
+
+.ggg-pdp-highlights small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.ggg-pdp-information {
+  margin-top: 20px;
+  scroll-margin-top: 20px;
+}
+
+.ggg-pdp-tabs {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  border-bottom: 2px solid #e0c8ed;
+}
+
+.ggg-pdp-tabs button {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 8px 30px 12px;
+  font-size: 21px;
+}
+
+.ggg-pdp-tabs button[aria-selected='true'] {
+  border-bottom: 5px solid #fa2b9c;
+  font-weight: 700;
+}
+
+.ggg-pdp-tab-panel {
+  padding: 26px 12px 0;
+}
+
+.ggg-pdp-tab-panel[hidden] {
+  display: none;
+}
+
+.ggg-pdp-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 30px;
+}
+
+.ggg-pdp-details-grid > div:first-child {
+  padding-right: 30px;
+  border-right: 2px solid #e0c8ed;
+}
+
+.ggg-storefront .ggg-pdp h2 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(28px, 3.9vw, 52px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.ggg-pdp-details-grid p {
+  margin-top: 12px;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.ggg-pdp-description {
+  margin-top: 20px;
+  color: inherit;
+  font-size: 16px;
+}
+
+.ggg-pdp-description summary {
+  padding-block: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ggg-pdp-description .prose {
+  color: inherit;
+}
+
+.ggg-storefront .ggg-pdp-description :is(h2, h3, h4) {
+  color: inherit;
+  font-family: 'GGG Goodly', sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.ggg-pdp-specifications {
+  align-self: start;
+  overflow: hidden;
+  border: 1px solid #dcc1eb;
+  border-radius: 12px;
+}
+
+.ggg-pdp-specifications > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 16px;
+  padding: 6px 20px;
+  border-bottom: 1px solid #dcc1eb;
+  line-height: 1.4;
+}
+
+.ggg-pdp-specifications > div:nth-child(even) {
+  background: #f0e5f8;
+}
+
+.ggg-pdp-specifications > div:last-child {
+  border-bottom: 0;
+}
+
+.ggg-pdp-specifications dt {
+  font-weight: 700;
+}
+
+.ggg-pdp-extra-information {
+  margin-top: 20px;
+}
+
+.ggg-pdp-extra-information summary {
+  padding: 12px 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ggg-pdp-shipping {
+  color: inherit;
+}
+
+.ggg-pdp-brand-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: clamp(110px, 14.3vw, 170px);
+  overflow: hidden;
+  padding: 10px 8%;
+  background: #f7d6ef url('/ggg/landing/background-hero-gradient.png') center / cover;
+}
+
+.ggg-pdp-banner-seal {
+  width: clamp(140px, 20vw, 220px);
+  height: auto;
+  margin-block: -40px;
+}
+
+.ggg-pdp-reviews {
+  --primary: 285 71% 26%;
+  --foreground: 285 71% 26%;
+  --font-family-body: 'GGG Goodly', sans-serif;
+  --font-family-heading: 'GGG Picky Retro', Georgia, serif;
+  padding: 16px 4%;
+  border-top: 1px solid #e0c8ed;
+  color: #601372;
+  font-family: 'GGG Goodly', sans-serif;
+}
+
+.ggg-pdp-reviews > summary {
+  padding-block: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ggg-storefront .ggg-pdp-reviews h2 {
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.ggg-pdp-brand-banner p {
+  padding-left: 32px;
+  border-left: 1px solid #96568f;
+  font-family: 'GGG Picky Retro', Georgia, serif;
+  font-size: clamp(30px, 5.4vw, 72px);
+  line-height: 1.1;
+}
+
+.ggg-pdp-banner-corner-top,
+.ggg-pdp-banner-corner-bottom {
+  position: absolute;
+  width: 15%;
+  height: auto;
+  pointer-events: none;
+}
+
+.ggg-pdp-banner-corner-top {
+  top: 0;
+  left: 0;
+}
+
+.ggg-pdp-banner-corner-bottom {
+  right: 0;
+  bottom: 0;
+}
+
+.ggg-pdp-related {
+  position: relative;
+  isolation: isolate;
+  padding-right: 12%;
+}
+
+.ggg-pdp-related .ggg-lineup {
+  background: transparent;
+}
+
+.ggg-pdp-related .ggg-lineup-heading {
+  text-align: left;
+}
+
+.ggg-pdp-related .ggg-lineup-heading p:empty {
+  display: none;
+}
+
+.ggg-pdp-related .ggg-lineup-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ggg-pdp-related .ggg-lineup-image {
+  aspect-ratio: 1.8;
+}
+
+.ggg-pdp-related .ggg-lineup h3 {
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.ggg-pdp-related .ggg-lineup-card:last-child:nth-child(odd) {
+  grid-column: auto;
+  width: auto;
+}
+
+.ggg-pdp-related-pattern {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 12%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .ggg-pdp-product {
+    padding: 22px 20px 30px;
+  }
+
+  .ggg-pdp-breadcrumbs {
+    padding-left: 0;
+    font-size: 13px;
+  }
+
+  .ggg-pdp-product-grid,
+  .ggg-pdp-details-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .ggg-pdp .product-gallery-slide {
+    aspect-ratio: 1.15;
+  }
+
+  .ggg-storefront .ggg-pdp h1 {
+    font-size: clamp(36px, 10vw, 52px);
+  }
+
+  .ggg-pdp-product-name {
+    font-size: 21px;
+  }
+
+  .ggg-pdp-highlights {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .ggg-pdp-highlights > div {
+    justify-content: flex-start;
+    min-height: 56px;
+  }
+
+  .ggg-pdp-tabs {
+    gap: 0;
+  }
+
+  .ggg-pdp-tabs button {
+    padding-inline: 14px;
+    font-size: 16px;
+  }
+
+  .ggg-pdp-tab-panel {
+    padding-inline: 0;
+  }
+
+  .ggg-pdp-details-grid > div:first-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .ggg-pdp-details-grid p {
+    font-size: 18px;
+  }
+
+  .ggg-pdp-brand-banner {
+    gap: 0;
+    padding: 16px;
+  }
+
+  .ggg-pdp-banner-seal {
+    flex-shrink: 0;
+    width: 105px;
+    margin-block: -20px;
+  }
+
+  .ggg-pdp-brand-banner p {
+    padding-left: 18px;
+    font-size: clamp(26px, 6vw, 36px);
+  }
+
+  .ggg-pdp-related {
+    padding-right: 0;
+  }
+
+  .ggg-pdp-related-pattern {
+    display: none;
+  }
+
+  .ggg-pdp-related .ggg-lineup-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

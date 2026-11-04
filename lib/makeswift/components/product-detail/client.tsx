@@ -12,7 +12,11 @@ import React, {
 } from 'react';
 
 import { Stream, type Streamable } from '@/vibes/soul/lib/streamable';
-import { ProductDetail, ProductDetailSkeleton } from '@/vibes/soul/sections/product-detail';
+import { ProductDetailSkeleton } from '@/vibes/soul/sections/product-detail';
+import {
+  BrandedProductDetail as ProductDetail,
+  type PdpDesign,
+} from '@/vibes/soul/sections/product-detail/branded-product-detail';
 import { mergeSections } from '~/lib/makeswift/utils/merge-sections';
 
 type VibesProductDetailProps = ComponentPropsWithoutRef<typeof ProductDetail>;
@@ -41,6 +45,7 @@ export const DescriptionSource = {
 type DescriptionSource = (typeof DescriptionSource)[keyof typeof DescriptionSource];
 
 interface EditableProps {
+  design?: PdpDesign;
   summaryText: string | undefined;
   description: { source: DescriptionSource; slot: ReactNode };
   accordions: Exclude<Awaited<VibesProductDetail['accordions']>, undefined>;

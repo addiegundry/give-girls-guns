@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import type { CatalogProductDetails } from '~/lib/product-details';
+import type { Product as RelatedProduct } from '@/vibes/soul/primitives/product-card';
 import {
   Content as CalloutContent,
   Header as CalloutHeader,
@@ -29,6 +31,7 @@ import { Field } from './schema';
 
 interface ProductDetailProduct {
   id: string;
+  catalogDetails?: Streamable<CatalogProductDetails>;
   title: string;
   href: string;
   images: Streamable<{
@@ -57,6 +60,7 @@ interface ProductDetailProduct {
 }
 
 export interface ProductDetailProps<F extends Field> {
+  relatedProducts?: Streamable<RelatedProduct[]>;
   breadcrumbs?: Streamable<Breadcrumb[]>;
   promotionCallouts?: Streamable<Array<{ id: string; text: string }>>;
   product: Streamable<ProductDetailProduct | null>;

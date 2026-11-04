@@ -5,8 +5,8 @@ import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/serve
 import { SearchParams } from 'nuqs/server';
 
 import { Stream, Streamable } from '@/vibes/soul/lib/streamable';
-import { FeaturedProductCarousel } from '@/vibes/soul/sections/featured-product-carousel';
 import { ProductVideos } from '@/vibes/soul/sections/product-detail/product-videos';
+import '@/vibes/soul/sections/product-detail/branded-product-detail.css';
 import { auth, getSessionCustomerAccessToken } from '~/auth';
 import { getProductsByIds } from '~/client/queries/get-products';
 import { rewriteWysiwygContentUrls } from '~/data-transformers/html-content-transformer';
@@ -14,9 +14,10 @@ import { pricesTransformer } from '~/data-transformers/prices-transformer';
 import { productCardTransformer } from '~/data-transformers/product-card-transformer';
 import { productOptionsTransformer } from '~/data-transformers/product-options-transformer';
 import { getPreferredCurrencyCode } from '~/lib/currency';
-import { APPAREL_PRODUCT_IDS } from '~/lib/ggg-storefront';
+import { APPAREL_PRODUCT_IDS, DEFAULT_LINEUP_PRODUCTS } from '~/lib/ggg-storefront';
 import { getMakeswiftPageMetadata } from '~/lib/makeswift';
 import { ProductDetail } from '~/lib/makeswift/components/product-detail';
+import { catalogProductDetails } from '~/lib/product-details';
 import { getRecaptchaSiteKey } from '~/lib/recaptcha';
 import { getMetadataAlternates } from '~/lib/seo/canonical';
 
@@ -137,19 +138,21 @@ export default async function Product({ params, searchParams }: Props) {
       useDefaultOptionSelections: true,
     };
 
-    const product = await getStreamableProductInventory(variables, customerAccessToken);
-
-    if (!product) {
-      return notFound();
+    try {
+      return await getStreamableProductInventory(variables, customerAccessToken);
+    } catch (error) {
+      // Inventory can fail independently of the product's images and content. Keep the PDP
+      // usable, but disable purchasing when availability cannot be confirmed.
+      // eslint-disable-next-line no-console
+      console.error('Unable to load product purchase availability', error);
+      return null;
     }
-
-    return product;
   });
 
   const streamableProductVariantInventory = Streamable.from(async () => {
     const product = await streamableProductInventory;
 
-    if (!product.inventory.hasVariantInventory) {
+    if (!product || !product.inventory.hasVariantInventory) {
       return undefined;
     }
 
@@ -180,6 +183,10 @@ export default async function Product({ params, searchParams }: Props) {
     return await getProductPricingAndRelatedProducts(variables, customerAccessToken);
   });
 
+  const streamableFields = Streamable.from(() =>
+    productOptionsTransformer(baseProduct.productOptions),
+  );
+
   const streamablePrices = Streamable.from(async () => {
     const product = await streamableProductPricingAndRelatedProducts;
 
@@ -187,7 +194,37 @@ export default async function Product({ params, searchParams }: Props) {
       return null;
     }
 
-    return pricesTransformer(product, format, taxDisplay) ?? null;
+    const fields = await streamableFields;
+    const selectionsResolved = fields
+      .filter((field) => field.persist && field.required)
+      .every(
+        (field) =>
+          Boolean(field.defaultValue) ||
+          optionValueIds.some(({ optionEntityId }) => String(optionEntityId) === field.name),
+      );
+
+    if (!selectionsResolved) return pricesTransformer(product, format, taxDisplay) ?? null;
+
+    // The API returns both the selected variant's price and the whole product's range.
+    // Once required options are resolved, display the selected price, retaining sale/tax data.
+    const selectedPrice = (prices: typeof product.pricesIncludingTax) =>
+      prices
+        ? {
+            ...prices,
+            priceRange: { min: prices.price, max: prices.price },
+          }
+        : null;
+
+    return (
+      pricesTransformer(
+        {
+          pricesIncludingTax: selectedPrice(product.pricesIncludingTax),
+          pricesExcludingTax: selectedPrice(product.pricesExcludingTax),
+        },
+        format,
+        taxDisplay,
+      ) ?? null
+    );
   });
 
   const streamableImages = Streamable.from(async () => {
@@ -223,7 +260,7 @@ export default async function Product({ params, searchParams }: Props) {
   const streameableCtaLabel = Streamable.from(async () => {
     const product = await streamableProductInventory;
 
-    if (product.availabilityV2.status === 'Unavailable') {
+    if (!product || product.availabilityV2.status === 'Unavailable') {
       return t('ProductDetails.Submit.unavailable');
     }
 
@@ -241,7 +278,7 @@ export default async function Product({ params, searchParams }: Props) {
   const streameableCtaDisabled = Streamable.from(async () => {
     const product = await streamableProductInventory;
 
-    if (product.availabilityV2.status === 'Unavailable') {
+    if (!product || product.availabilityV2.status === 'Unavailable') {
       return true;
     }
 
@@ -291,7 +328,7 @@ export default async function Product({ params, searchParams }: Props) {
       streamableInventorySettings,
     ]);
 
-    if (!inventorySetting) {
+    if (!product || !inventorySetting) {
       return null;
     }
 
@@ -381,6 +418,8 @@ export default async function Product({ params, searchParams }: Props) {
       streamableInventorySettings,
     ]);
 
+    if (!product) return null;
+
     let inventory;
 
     if (!product.inventory.hasVariantInventory) {
@@ -446,29 +485,26 @@ export default async function Product({ params, searchParams }: Props) {
     };
   });
 
+  const streamableCatalogDetails = Streamable.from(async () => {
+    const product = await streamableProduct;
+
+    return catalogProductDetails({
+      name: baseProduct.name,
+      sku: product.sku,
+      brand: baseProduct.brand?.name,
+      weight: product.weight,
+      condition: product.condition,
+      customFields: removeEdgesAndNodes(product.customFields).map(({ name, value }) => ({
+        name,
+        value,
+      })),
+    });
+  });
+
   const streameableAccordions = Streamable.from(async () => {
     const product = await streamableProduct;
 
-    const customFields = removeEdgesAndNodes(product.customFields);
-
-    const specifications = [
-      {
-        name: t('ProductDetails.Accordions.sku'),
-        value: product.sku,
-      },
-      {
-        name: t('ProductDetails.Accordions.weight'),
-        value: `${product.weight?.value} ${product.weight?.unit}`,
-      },
-      {
-        name: t('ProductDetails.Accordions.condition'),
-        value: product.condition,
-      },
-      ...customFields.map((field) => ({
-        name: field.name,
-        value: field.value,
-      })),
-    ];
+    const { specifications } = await streamableCatalogDetails;
 
     return [
       ...(specifications.length
@@ -511,6 +547,23 @@ export default async function Product({ params, searchParams }: Props) {
   });
 
   const streameableRelatedProducts = Streamable.from(async () => {
+    if (DEFAULT_LINEUP_PRODUCTS.some(({ entityId }) => Number(entityId) === productId)) {
+      const result = await getProductsByIds({
+        entityIds: DEFAULT_LINEUP_PRODUCTS.map(({ entityId }) => Number(entityId)).filter(
+          (id) => id !== productId,
+        ),
+        locale,
+      });
+
+      return productCardTransformer(
+        result.products ?? [],
+        format,
+        undefined,
+        undefined,
+        taxDisplay,
+      );
+    }
+
     if (APPAREL_PRODUCT_IDS.some((id) => id === productId)) {
       const result = await getProductsByIds({
         entityIds: APPAREL_PRODUCT_IDS.filter((id) => id !== productId),
@@ -533,6 +586,23 @@ export default async function Product({ params, searchParams }: Props) {
     }
 
     const relatedProducts = removeEdgesAndNodes(product.relatedProducts);
+
+    if (!relatedProducts.length) {
+      const result = await getProductsByIds({
+        entityIds: DEFAULT_LINEUP_PRODUCTS.map(({ entityId }) => Number(entityId)).filter(
+          (id) => id !== productId,
+        ),
+        locale,
+      });
+
+      return productCardTransformer(
+        result.products ?? [],
+        format,
+        undefined,
+        undefined,
+        taxDisplay,
+      );
+    }
 
     return productCardTransformer(relatedProducts, format, undefined, undefined, taxDisplay);
   });
@@ -590,8 +660,10 @@ export default async function Product({ params, searchParams }: Props) {
       <ProductAnalyticsProvider data={streamableAnalyticsData}>
         <ProductDetail
           action={addToCart}
+          relatedProducts={streameableRelatedProducts}
           additionalActions={
             <WishlistButton
+              showLabel
               formId={detachedWishlistFormId}
               productId={productId}
               productSku={streamableProductSku}
@@ -602,17 +674,20 @@ export default async function Product({ params, searchParams }: Props) {
           ctaLabel={streameableCtaLabel}
           decrementLabel={t('ProductDetails.decreaseQuantity')}
           emptySelectPlaceholder={t('ProductDetails.emptySelectPlaceholder')}
-          fields={productOptionsTransformer(baseProduct.productOptions)}
+          fields={streamableFields}
           incrementLabel={t('ProductDetails.increaseQuantity')}
           loadMoreImagesAction={getMoreProductImages}
           prefetch={true}
           product={{
             id: baseProduct.entityId.toString(),
+            catalogDetails: streamableCatalogDetails,
             title: baseProduct.name,
             description: (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: rewriteWysiwygContentUrls(baseProduct.description),
+                  __html: rewriteWysiwygContentUrls(
+                    baseProduct.description.replace(/<(\/?)h1(?=[\s>])/gi, '<$1h3'),
+                  ),
                 }}
               />
             ),
@@ -644,22 +719,9 @@ export default async function Product({ params, searchParams }: Props) {
         {(videos) => videos.length > 0 && <ProductVideos videos={videos} />}
       </Stream>
 
-      <FeaturedProductCarousel
-        cta={{
-          label: t('RelatedProducts.cta'),
-          href: APPAREL_PRODUCT_IDS.some((id) => id === productId) ? '/shop' : '/shop-all',
-        }}
-        emptyStateSubtitle={t('RelatedProducts.browseCatalog')}
-        emptyStateTitle={t('RelatedProducts.noRelatedProducts')}
-        nextLabel={t('RelatedProducts.nextProducts')}
-        previousLabel={t('RelatedProducts.previousProducts')}
-        products={streameableRelatedProducts}
-        scrollbarLabel={t('RelatedProducts.scrollbar')}
-        title={t('RelatedProducts.title')}
-      />
-
       {showRating && (
-        <div id="reviews">
+        <details className="ggg-pdp-reviews" id="reviews">
+          <summary>Customer reviews ({baseProduct.reviewSummary.numberOfReviews})</summary>
           <Reviews
             productId={productId}
             recaptchaSiteKey={recaptchaSiteKey}
@@ -667,7 +729,7 @@ export default async function Product({ params, searchParams }: Props) {
             streamableImages={streamableImages}
             streamableProduct={streamableProduct}
           />
-        </div>
+        </details>
       )}
 
       <Stream

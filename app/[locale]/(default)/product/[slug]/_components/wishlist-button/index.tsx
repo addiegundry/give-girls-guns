@@ -130,12 +130,13 @@ async function getWishlistButton(
 }
 
 interface Props {
+  showLabel?: boolean;
   productId: number;
   formId: string;
   productSku?: Streamable<string>;
 }
 
-export const WishlistButton = async ({ productId, productSku, formId }: Props) => {
+export const WishlistButton = async ({ productId, productSku, formId, showLabel }: Props) => {
   const t = await getTranslations('Wishlist.Button');
   const { isProductInWishlist, wishlists } = await getWishlistButton(productId, productSku);
 
@@ -146,7 +147,11 @@ export const WishlistButton = async ({ productId, productSku, formId }: Props) =
       newWishlistLabel={t('addToNewWishlist')}
       wishlists={wishlists}
     >
-      <Favorite checked={isProductInWishlist} label={t('label')} />
+      <Favorite
+        checked={isProductInWishlist}
+        label={showLabel ? 'Save for Later' : t('label')}
+        showLabel={showLabel}
+      />
     </WishlistButtonDropdown>
   );
 };

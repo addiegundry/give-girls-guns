@@ -23,17 +23,7 @@ export interface ProductGalleryProps {
   className?: string;
   thumbnailLabel?: string;
   aspectRatio?:
-    | '1:1'
-    | '4:5'
-    | '5:4'
-    | '3:4'
-    | '4:3'
-    | '2:3'
-    | '3:2'
-    | '16:9'
-    | '9:16'
-    | '5:6'
-    | '6:5';
+    '1:1' | '4:5' | '5:4' | '3:4' | '4:3' | '2:3' | '3:2' | '16:9' | '9:16' | '5:6' | '6:5';
   fit?: 'contain' | 'cover';
   pageInfo?: { hasNextPage: boolean; endCursor: string | null };
   productId?: number;
@@ -237,12 +227,15 @@ export function ProductGallery({
       <div aria-live="polite" className="sr-only" role="status">
         {loadingStatus}
       </div>
-      <div className="w-full overflow-hidden rounded-xl @xl:rounded-2xl" ref={emblaRef}>
+      <div
+        className="product-gallery-main w-full overflow-hidden rounded-xl @xl:rounded-2xl"
+        ref={emblaRef}
+      >
         <div className="flex">
           {images.map((image, idx) => (
             <div
               className={clsx(
-                'relative w-full shrink-0 grow-0 basis-full',
+                'product-gallery-slide relative w-full shrink-0 grow-0 basis-full',
                 {
                   '5:6': 'aspect-[5/6]',
                   '3:4': 'aspect-[3/4]',
@@ -278,12 +271,13 @@ export function ProductGallery({
         </div>
       </div>
 
-      <div className="flex max-w-full shrink-0 flex-col gap-2">
+      <div className="product-gallery-thumbnails flex max-w-full shrink-0 flex-col gap-2">
         <div className="overflow-hidden" ref={emblaThumbsRef}>
           <div className="flex flex-row gap-2 p-1">
             {images.map((image, index) => (
               <button
                 aria-label={`${thumbnailLabel} ${index + 1}`}
+                aria-pressed={index === selectedIndex}
                 className={clsx(
                   'relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--product-gallery-focus,hsl(var(--primary)))] focus-visible:ring-offset-2 @md:h-16 @md:w-16',
                   index === selectedIndex

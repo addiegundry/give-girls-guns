@@ -259,7 +259,7 @@ export function ProductDetailForm<F extends Field>({
   return (
     <FormProvider context={form.context}>
       <FormStateInput />
-      <form {...getFormProps(form)} action={formAction}>
+      <form {...getFormProps(form)} action={formAction} className="product-detail-purchase-form">
         <input name="id" type="hidden" value={productId} />
         <div className="space-y-6 pb-8">
           {fields.map((field) => {
@@ -281,7 +281,7 @@ export function ProductDetailForm<F extends Field>({
             </FormStatus>
           ))}
 
-          <div className="h-[3.2rem] sm:h-[2.6rem]">
+          <div className="product-detail-stock h-[3.2rem] sm:h-[2.6rem]">
             {!!stockDisplayData?.stockLevelMessage && (
               <div
                 className={clsx(
@@ -326,8 +326,9 @@ export function ProductDetailForm<F extends Field>({
             )}
           </div>
 
-          <div className="flex gap-x-3">
+          <div className="product-detail-purchase-actions flex gap-x-3">
             <NumberInput
+              className="product-detail-quantity"
               aria-label={quantityLabel}
               decrementLabel={decrementLabel}
               incrementLabel={incrementLabel}

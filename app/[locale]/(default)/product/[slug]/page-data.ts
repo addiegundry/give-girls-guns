@@ -1,3 +1,4 @@
+import { BigCommerceGQLError } from '@bigcommerce/catalyst-client';
 import { cache } from 'react';
 
 import { client } from '~/client';
@@ -441,16 +442,58 @@ const ProductPricingAndRelatedProductsQuery = graphql(
   [PricingFragment, FeaturedProductsCarouselFragment],
 );
 
+const ProductPricingOnlyQuery = graphql(
+  `
+    query ProductPricingOnlyQuery(
+      $entityId: Int!
+      $optionValueIds: [OptionValueId!]
+      $useDefaultOptionSelections: Boolean
+      $currencyCode: currencyCode
+    ) {
+      site {
+        product(
+          entityId: $entityId
+          optionValueIds: $optionValueIds
+          useDefaultOptionSelections: $useDefaultOptionSelections
+        ) {
+          ...PricingFragment
+        }
+      }
+    }
+  `,
+  [PricingFragment],
+);
+
 export const getProductPricingAndRelatedProducts = cache(
   async (variables: Variables, customerAccessToken?: string) => {
-    const { data } = await client.fetch({
-      document: ProductPricingAndRelatedProductsQuery,
-      variables,
-      customerAccessToken,
-      fetchOptions: customerAccessToken ? { cache: 'no-store' } : { next: { revalidate } },
-    });
+    try {
+      const { data } = await client.fetch({
+        document: ProductPricingAndRelatedProductsQuery,
+        variables,
+        customerAccessToken,
+        fetchOptions: customerAccessToken ? { cache: 'no-store' } : { next: { revalidate } },
+      });
 
-    return data.site.product;
+      return data.site.product;
+    } catch (error) {
+      // A related product's optional inventory can fail without invalidating this product's
+      // price. Retry only pricing, and let the PDP use its catalog-backed related fallback.
+      if (
+        !(error instanceof BigCommerceGQLError) ||
+        !error.errors.length ||
+        !error.errors.every(({ path }) => path?.includes('relatedProducts'))
+      )
+        throw error;
+
+      const { data } = await client.fetch({
+        document: ProductPricingOnlyQuery,
+        variables,
+        customerAccessToken,
+        fetchOptions: customerAccessToken ? { cache: 'no-store' } : { next: { revalidate } },
+      });
+
+      return data.site.product ? { ...data.site.product, relatedProducts: { edges: [] } } : null;
+    }
   },
 );
 
