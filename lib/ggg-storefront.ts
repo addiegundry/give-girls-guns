@@ -4,9 +4,9 @@ export const APPAREL_PRODUCT_IDS = [446, 104, 453] as const;
 
 // Storefront products: the three ammo calibers, followed by the IceShaker partner collection.
 export const DEFAULT_LINEUP_PRODUCTS = [
-  { entityId: '104', displayName: '9mm Ammo' },
-  { entityId: '457', displayName: '.380 ACP Ammo' },
-  { entityId: '100', displayName: '.223 Remington Ammo' },
+  { entityId: '104', displayName: '9mm Ammo Elite Defense 124gr' },
+  { entityId: '205', displayName: '9mm Ammo Classic Match 124gr' },
+  { entityId: '374', displayName: '5.56mm Ammo Classic Match 55gr' },
   { entityId: '467', buttonText: 'View Tumbler' },
   { entityId: '468', buttonText: 'View Tumbler' },
   { entityId: '469', buttonText: 'View Tumbler' },
