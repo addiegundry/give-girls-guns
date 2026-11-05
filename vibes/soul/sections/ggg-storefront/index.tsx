@@ -275,7 +275,7 @@ export function BrandHero({
           fill
           preload
           sizes="(max-width: 700px) 160vw, 100vw"
-          src={image || '/ggg/landing/hero-background.png'}
+          src={image || '/ggg/landing/hero-background.webp'}
         />
         {showSeal && (
           <Image
