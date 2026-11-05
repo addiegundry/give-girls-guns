@@ -17,3 +17,13 @@ export interface LineupSelection {
   displayName?: string;
   buttonText?: string;
 }
+
+export const GGG_INSTAGRAM_URL = 'https://www.instagram.com/give_girls_guns/';
+
+export function resolveInstagramUrl(url: string) {
+  const trimmedUrl = url.trim();
+
+  return /^https?:\/\/(?:www\.)?instagram\.com\/atlanta_arms\/?(?:[?#].*)?$/i.test(trimmedUrl)
+    ? GGG_INSTAGRAM_URL
+    : trimmedUrl;
+}

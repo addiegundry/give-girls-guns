@@ -1,24 +1,18 @@
-@font-face {
-  font-family: 'GGG Anton';
-  src: url('/ggg/fonts/Anton-Regular.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
 .ggg-about-page {
-  --about-ink: #350d2d;
-  --about-coral: #ff605b;
-  --about-display: 'GGG Anton', Impact, sans-serif;
+  --about-ink: #6e5084;
+  --about-accent: #e73c28;
+  --about-paper: #f7f1fc;
+  --about-display: 'GGG Picky Retro', Georgia, serif;
+  --about-body: 'GGG Goodly', sans-serif;
   color: var(--about-ink);
-  background: #fff;
-  font-family: var(--font-family-inter), Arial, sans-serif;
+  background: var(--about-paper);
+  font-family: var(--about-body);
+  font-weight: 500;
   font-size: clamp(16px, 1.4vw, 20px);
   line-height: 1.4;
 }
 
-.ggg-storefront .ggg-about-page :is(h1, h2),
-.ggg-about-statistics dt {
+.ggg-storefront .ggg-about-page :is(h1, h2) {
   font-family: var(--about-display);
   font-style: normal;
   font-weight: 400;
@@ -32,13 +26,13 @@
 }
 
 .ggg-about-highlight {
-  color: var(--about-coral);
+  color: var(--about-accent);
 }
 
 .ggg-about-introduction {
   display: grid;
   grid-template-columns: 45% 55%;
-  background: radial-gradient(ellipse at 25% 20%, #eedcf0, #d6bcdf);
+  background: var(--about-paper);
 }
 
 .ggg-about-introduction-copy {
@@ -51,18 +45,18 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 18px;
-  color: var(--about-coral);
-  font-family: var(--about-display);
+  color: var(--about-ink);
+  font-family: var(--about-body);
+  font-weight: 500;
   font-size: clamp(17px, 1.8vw, 26px);
   letter-spacing: 0.015em;
-  text-transform: uppercase;
 }
 
 .ggg-about-eyebrow::after {
   width: 44px;
   height: 3px;
   flex-shrink: 0;
-  background: var(--about-coral);
+  background: var(--about-accent);
   content: '';
 }
 
@@ -94,7 +88,7 @@
   display: grid;
   grid-template-columns: 44% 56%;
   min-height: 38vw;
-  background: #faf8fb;
+  background: var(--about-paper);
 }
 
 .ggg-about-defense-copy {
@@ -104,8 +98,7 @@
 
 .ggg-storefront .ggg-about-defense h2 {
   margin-bottom: 20px;
-  font-size: clamp(42px, 6vw, 86px);
-  text-transform: uppercase;
+  font-size: clamp(36px, 4.6vw, 68px);
 }
 
 .ggg-about-defense h2::after {
@@ -113,7 +106,7 @@
   width: 88px;
   height: 4px;
   margin-top: 16px;
-  background: var(--about-coral);
+  background: var(--about-accent);
   content: '';
 }
 
@@ -136,14 +129,13 @@
 }
 
 .ggg-about-manufacturing {
-  color: #fff8f2;
-  background: radial-gradient(ellipse at 35% 45%, #501a42, #310c2a);
+  color: var(--about-paper);
+  background: var(--about-ink);
 }
 
 .ggg-storefront .ggg-about-manufacturing h2 {
   margin-bottom: 18px;
-  font-size: clamp(34px, 5.2vw, 74px);
-  text-transform: uppercase;
+  font-size: clamp(32px, 4.2vw, 62px);
 }
 
 .ggg-about-statistics {
@@ -154,15 +146,17 @@
 }
 
 .ggg-about-statistics > div + div {
-  border-left: 1px solid #e1c6dc;
+  border-left: 1px solid var(--about-paper);
   padding-left: clamp(20px, 3vw, 48px);
 }
 
 .ggg-about-statistics dt {
   margin-bottom: 18px;
-  font-size: clamp(32px, 4.6vw, 64px);
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
+  font-family: var(--about-body);
+  font-weight: 500;
+  font-size: clamp(26px, 2.8vw, 40px);
+  line-height: 1.15;
+  overflow-wrap: break-word;
 }
 
 .ggg-about-statistics dd {
@@ -171,7 +165,7 @@
 }
 
 .ggg-about-community {
-  background: radial-gradient(ellipse at 40% 30%, #efe2f1, #d4b7dd);
+  background: var(--about-paper);
 }
 
 .ggg-storefront .ggg-about-community h2 {
@@ -193,11 +187,12 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border: 2px solid var(--about-coral);
+  border: 2px solid var(--about-accent);
   border-radius: 3px;
   padding: 10px 26px;
-  background: var(--about-coral);
-  color: #fff;
+  background: var(--about-accent);
+  color: var(--about-paper);
+  font-size: max(19px, 1em);
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
@@ -205,7 +200,8 @@
 }
 
 .ggg-about-cta:hover {
-  background: #e34e49;
+  background: var(--about-ink);
+  border-color: var(--about-ink);
 }
 
 .ggg-about-cta-outline {
@@ -215,7 +211,8 @@
 }
 
 .ggg-about-cta-outline:hover {
-  background: #ffffff60;
+  background: var(--about-ink);
+  color: var(--about-paper);
 }
 
 .ggg-about-social {
@@ -279,13 +276,13 @@
 
   .ggg-about-statistics > div + div {
     border-left: 0;
-    border-top: 1px solid #e1c6dc;
+    border-top: 1px solid var(--about-paper);
     padding: 24px 0 0;
   }
 
   .ggg-about-statistics dt {
     margin-bottom: 12px;
-    font-size: clamp(34px, 6vw, 48px);
+    font-size: clamp(26px, 5vw, 36px);
   }
 }
 
@@ -301,4 +298,9 @@
     border: 0;
     padding-left: 0;
   }
+}
+
+/* Keep every text color on the dark panel readable using the guide's pale lilac. */
+.ggg-about-manufacturing .ggg-about-highlight {
+  color: var(--about-paper);
 }

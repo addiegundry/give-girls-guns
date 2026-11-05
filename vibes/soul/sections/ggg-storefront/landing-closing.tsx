@@ -7,6 +7,7 @@ import { InlineEmailForm } from '@/vibes/soul/primitives/inline-email-form';
 import { Image } from '~/components/image';
 import { Link } from '~/components/link';
 import { subscribe } from '~/components/subscribe/_actions/subscribe';
+import { GGG_INSTAGRAM_URL, resolveInstagramUrl } from '~/lib/ggg-storefront';
 
 type Destination = { href: string; target?: string };
 type EditableProps = { className?: string };
@@ -131,7 +132,7 @@ export function BrandFooter({
   contactLink,
   privacyLink,
   additionalLinks = [],
-  instagramUrl = 'https://www.instagram.com/Atlanta_Arms/',
+  instagramUrl = GGG_INSTAGRAM_URL,
   cornerImage,
   showCorner = true,
   className,
@@ -196,7 +197,7 @@ export function BrandFooter({
           <a
             aria-label={`${brand} on Instagram (opens in a new tab)`}
             className="ggg-landing-instagram"
-            href={instagramUrl}
+            href={resolveInstagramUrl(instagramUrl)}
             rel="noopener noreferrer"
             target="_blank"
           >

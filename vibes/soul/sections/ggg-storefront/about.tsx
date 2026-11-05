@@ -5,6 +5,7 @@ import { useId } from 'react';
 
 import { Image } from '~/components/image';
 import { Link } from '~/components/link';
+import { GGG_INSTAGRAM_URL, resolveInstagramUrl } from '~/lib/ggg-storefront';
 
 export const aboutDefaults = {
   eyebrow: 'About Give Girls Guns',
@@ -201,7 +202,7 @@ export function AboutCommunity({
           </Link>
           <Link
             className="ggg-about-social"
-            href={destination(socialLink, 'https://www.instagram.com/Atlanta_Arms/')}
+            href={resolveInstagramUrl(destination(socialLink, GGG_INSTAGRAM_URL))}
             rel="noopener noreferrer"
             target={socialLink?.target || '_blank'}
           >

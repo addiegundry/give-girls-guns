@@ -33,6 +33,7 @@ import {
   aboutDefaults,
 } from '@/vibes/soul/sections/ggg-storefront/about';
 import { CategoryHero, CategoryBasicsBanner } from '@/vibes/soul/sections/ggg-storefront/category';
+import { GGG_INSTAGRAM_URL } from '~/lib/ggg-storefront';
 import { runtime } from '~/lib/makeswift/runtime';
 
 import {
@@ -316,10 +317,7 @@ runtime.registerComponent(BrandFooter, {
       }),
       getItemLabel: (item) => item?.label || 'Footer link',
     }),
-    instagramUrl: text(
-      'Instagram URL (blank hides icon)',
-      'https://www.instagram.com/Atlanta_Arms/',
-    ),
+    instagramUrl: text('Instagram URL (blank hides icon)', GGG_INSTAGRAM_URL),
     showCorner: Checkbox({ label: 'Show decorative corner', defaultValue: true }),
     cornerImage: Image({ label: 'Corner artwork (optional)' }),
   },
@@ -472,6 +470,6 @@ runtime.registerComponent(AboutCommunity, {
     communityLabel: text('Community button', 'Join the Community'),
     communityLink: Link({ label: 'Community destination (defaults to newsletter)' }),
     socialLabel: text('Social link', 'Follow Along'),
-    socialLink: Link({ label: 'Social destination (defaults to existing Instagram)' }),
+    socialLink: Link({ label: 'Social destination (defaults to Give Girls Guns Instagram)' }),
   },
 });
