@@ -633,6 +633,18 @@
   max-width: 550px;
 }
 .ggg-storefront .ggg-contact {
+  --ggg-ink: #601372;
+  --foreground: 287 71% 26%;
+  --primary: 287 71% 26%;
+  --contrast-300: 281 21% 49%;
+  --contrast-400: 281 25% 39%;
+  --contrast-500: 281 28% 34%;
+  --button-primary-background: #ff3d24;
+  --button-primary-background-hover: #df2d19;
+  --button-primary-border: #ff9985;
+  --button-primary-text: #fff;
+  --button-focus: #fa2b9c;
+  color: #601372;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 100px;
@@ -644,7 +656,7 @@
 }
 .ggg-contact > div > p:not(.ggg-eyebrow) {
   max-width: 430px;
-  color: #5c706d;
+  color: #6e5084;
 }
 .ggg-contact-art {
   position: relative;
@@ -654,18 +666,19 @@
   margin-top: 35px;
 }
 .ggg-contact-form :is(input:not([type='hidden']), textarea) {
-  border-color: #70508070;
+  color: #601372;
+  border-color: #b994cc;
   border-radius: 4px;
   background: transparent;
 }
 .ggg-contact-form button[type='submit'] {
   border-radius: 3px;
-  background: var(--ggg-ink);
+  background: #ff3d24;
   color: white;
 }
 .ggg-contact-form [role='status'] {
   padding: 20px;
-  background: #e5d7ee;
+  background: #f0e3fc;
 }
 .ggg-main-content {
   min-height: 40vh;
@@ -955,7 +968,7 @@
 }
 .ggg-contact-details > p {
   font-size: 13px;
-  color: #5c706d;
+  color: #6e5084;
   margin-bottom: 20px;
 }
 .ggg-contact-channel {
@@ -963,7 +976,7 @@
   display: flex;
   flex-direction: column;
   padding: 20px 0;
-  border-top: 1px solid #205f5d30;
+  border-top: 1px solid #60137230;
 }
 .ggg-contact-channel > span:first-child {
   font-size: 10px;

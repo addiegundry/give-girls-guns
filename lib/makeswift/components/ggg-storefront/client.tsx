@@ -48,7 +48,9 @@ export function MSRangeDayLineup({
 }: Omit<RangeDayLineupProps, 'products' | 'loading'> & { selectedProducts?: LineupSelection[] }) {
   const initialProducts = useContext(LineupContext);
   const chosenProducts = selectedProducts.filter((product) => product.entityId);
-  const selection = chosenProducts.length ? chosenProducts : DEFAULT_LINEUP_PRODUCTS;
+  const selection: readonly LineupSelection[] = chosenProducts.length
+    ? chosenProducts
+    : DEFAULT_LINEUP_PRODUCTS;
   const useInitialProducts = !chosenProducts.length && initialProducts !== null;
   const { products, isLoading } = useProducts({
     collection: 'none',
@@ -60,7 +62,9 @@ export function MSRangeDayLineup({
   const orderedProducts = selection.flatMap((selected) => {
     const product = catalogProducts?.find((item) => item.id === selected.entityId);
 
-    return product ? [{ ...product, displayName: selected.displayName }] : [];
+    return product
+      ? [{ ...product, displayName: selected.displayName, buttonText: selected.buttonText }]
+      : [];
   });
 
   return (

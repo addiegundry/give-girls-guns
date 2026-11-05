@@ -183,7 +183,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: 44% 1fr;
+  grid-template-columns: 40% 1fr;
   align-items: center;
   min-height: min(38.5vw, 778px);
   overflow: hidden;
@@ -207,15 +207,16 @@
 
 .ggg-landing-hero-copy {
   position: relative;
-  padding: 5.75vw 0 5.05vw 5.65vw;
+  min-width: 0;
+  padding: 4.5vw 1vw 1.5vw 5.65vw;
 }
 
 .ggg-storefront .ggg-landing-hero h1 {
   font-family: 'GGG Picky Retro', Georgia, serif;
-  font-size: clamp(48px, 7.4vw, 140px);
+  font-size: clamp(32px, 4.8vw, 100px);
   font-style: normal;
   font-weight: 400;
-  line-height: 0.76;
+  line-height: 0.96;
   letter-spacing: -0.025em;
   white-space: pre-line;
   text-wrap: initial;
@@ -224,7 +225,7 @@
 
 .ggg-storefront .ggg-landing-hero-copy p {
   margin-top: clamp(12px, 1.1vw, 22px);
-  font-size: clamp(16px, 1.92vw, 32px);
+  font-size: clamp(16px, 1.65vw, 28px);
   line-height: 1.35;
 }
 
@@ -348,7 +349,7 @@
 
   .ggg-storefront .ggg-landing-hero h1 {
     max-width: 500px;
-    font-size: clamp(46px, 12.8vw, 76px);
+    font-size: clamp(34px, 10.2vw, 68px);
     line-height: 0.94;
   }
 

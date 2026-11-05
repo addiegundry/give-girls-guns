@@ -1,0 +1,304 @@
+@font-face {
+  font-family: 'GGG Anton';
+  src: url('/ggg/fonts/Anton-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.ggg-about-page {
+  --about-ink: #350d2d;
+  --about-coral: #ff605b;
+  --about-display: 'GGG Anton', Impact, sans-serif;
+  color: var(--about-ink);
+  background: #fff;
+  font-family: var(--font-family-inter), Arial, sans-serif;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.4;
+}
+
+.ggg-storefront .ggg-about-page :is(h1, h2),
+.ggg-about-statistics dt {
+  font-family: var(--about-display);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  text-wrap: initial;
+}
+
+.ggg-about-page p {
+  white-space: pre-line;
+}
+
+.ggg-about-highlight {
+  color: var(--about-coral);
+}
+
+.ggg-about-introduction {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  background: radial-gradient(ellipse at 25% 20%, #eedcf0, #d6bcdf);
+}
+
+.ggg-about-introduction-copy {
+  align-self: center;
+  padding: clamp(28px, 3.8vw, 64px);
+}
+
+.ggg-storefront .ggg-about-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  color: var(--about-coral);
+  font-family: var(--about-display);
+  font-size: clamp(17px, 1.8vw, 26px);
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.ggg-about-eyebrow::after {
+  width: 44px;
+  height: 3px;
+  flex-shrink: 0;
+  background: var(--about-coral);
+  content: '';
+}
+
+.ggg-storefront .ggg-about-introduction h1 {
+  margin-bottom: 22px;
+  font-size: clamp(34px, 3.95vw, 62px);
+}
+
+.ggg-about-introduction h1 span {
+  display: block;
+}
+
+.ggg-about-portrait {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 566 / 394;
+}
+
+.ggg-about-portrait img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.ggg-about-defense {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 44% 56%;
+  min-height: 38vw;
+  background: #faf8fb;
+}
+
+.ggg-about-defense-copy {
+  align-self: center;
+  padding: clamp(28px, 3.8vw, 64px) 0 clamp(28px, 3.8vw, 64px) clamp(28px, 4vw, 64px);
+}
+
+.ggg-storefront .ggg-about-defense h2 {
+  margin-bottom: 20px;
+  font-size: clamp(42px, 6vw, 86px);
+  text-transform: uppercase;
+}
+
+.ggg-about-defense h2::after {
+  display: block;
+  width: 88px;
+  height: 4px;
+  margin-top: 16px;
+  background: var(--about-coral);
+  content: '';
+}
+
+.ggg-about-defense-art {
+  position: relative;
+  align-self: stretch;
+  margin-left: -5%;
+  z-index: -1;
+}
+
+.ggg-about-defense-art img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.ggg-about-section-inner {
+  max-width: 1600px;
+  margin-inline: auto;
+  padding: clamp(32px, 3.5vw, 56px) clamp(24px, 4.7vw, 76px);
+}
+
+.ggg-about-manufacturing {
+  color: #fff8f2;
+  background: radial-gradient(ellipse at 35% 45%, #501a42, #310c2a);
+}
+
+.ggg-storefront .ggg-about-manufacturing h2 {
+  margin-bottom: 18px;
+  font-size: clamp(34px, 5.2vw, 74px);
+  text-transform: uppercase;
+}
+
+.ggg-about-statistics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  margin-top: 32px;
+}
+
+.ggg-about-statistics > div + div {
+  border-left: 1px solid #e1c6dc;
+  padding-left: clamp(20px, 3vw, 48px);
+}
+
+.ggg-about-statistics dt {
+  margin-bottom: 18px;
+  font-size: clamp(32px, 4.6vw, 64px);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.ggg-about-statistics dd {
+  margin: 0;
+  font-size: clamp(16px, 1.45vw, 20px);
+}
+
+.ggg-about-community {
+  background: radial-gradient(ellipse at 40% 30%, #efe2f1, #d4b7dd);
+}
+
+.ggg-storefront .ggg-about-community h2 {
+  margin-bottom: 12px;
+  font-size: clamp(50px, 7vw, 94px);
+}
+
+.ggg-about-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px 34px;
+  margin-top: 24px;
+}
+
+.ggg-about-cta {
+  display: inline-flex;
+  min-height: 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid var(--about-coral);
+  border-radius: 3px;
+  padding: 10px 26px;
+  background: var(--about-coral);
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  transition: background-color 150ms ease;
+}
+
+.ggg-about-cta:hover {
+  background: #e34e49;
+}
+
+.ggg-about-cta-outline {
+  border-color: var(--about-ink);
+  background: transparent;
+  color: var(--about-ink);
+}
+
+.ggg-about-cta-outline:hover {
+  background: #ffffff60;
+}
+
+.ggg-about-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  border-left: 1px solid var(--about-ink);
+  padding-left: 34px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+#ggg-newsletter {
+  scroll-margin-top: 24px;
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .ggg-about-introduction-copy {
+    padding: 28px;
+  }
+
+  .ggg-storefront .ggg-about-introduction h1 {
+    font-size: 3.8vw;
+  }
+}
+
+@media (max-width: 900px) {
+  .ggg-about-introduction,
+  .ggg-about-defense {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ggg-about-introduction-copy,
+  .ggg-about-defense-copy {
+    padding: 32px 24px;
+  }
+
+  .ggg-storefront .ggg-about-introduction h1 {
+    font-size: clamp(34px, 7.7vw, 66px);
+  }
+
+  .ggg-about-portrait {
+    height: auto;
+  }
+
+  .ggg-about-defense-art {
+    aspect-ratio: 589 / 381;
+    margin: 0;
+  }
+
+  .ggg-about-defense-art img {
+    object-fit: contain;
+  }
+
+  .ggg-about-statistics {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .ggg-about-statistics > div + div {
+    border-left: 0;
+    border-top: 1px solid #e1c6dc;
+    padding: 24px 0 0;
+  }
+
+  .ggg-about-statistics dt {
+    margin-bottom: 12px;
+    font-size: clamp(34px, 6vw, 48px);
+  }
+}
+
+@media (max-width: 540px) {
+  .ggg-about-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ggg-about-social {
+    align-self: flex-start;
+    border: 0;
+    padding-left: 0;
+  }
+}

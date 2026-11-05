@@ -12,7 +12,7 @@ export interface RangeDayLineupProps {
   description?: string;
   buttonText?: string;
   loading?: boolean;
-  products: Array<Product & { displayName?: string }>;
+  products: Array<Product & { displayName?: string; buttonText?: string }>;
 }
 
 export function RangeDayLineup({
@@ -37,8 +37,8 @@ export function RangeDayLineup({
           <p>{description}</p>
         </div>
         {loading ? (
-          <div aria-busy="true" aria-label="Loading ammunition lineup" className="ggg-lineup-grid">
-            {[1, 2, 3].map((id) => (
+          <div aria-busy="true" aria-label="Loading product lineup" className="ggg-lineup-grid">
+            {[1, 2, 3, 4, 5, 6].map((id) => (
               <div aria-hidden="true" className="ggg-lineup-skeleton" key={id} />
             ))}
           </div>
@@ -67,11 +67,11 @@ export function RangeDayLineup({
                     <Link href={product.href}>{product.displayName || product.title}</Link>
                   </h3>
                   <Link
-                    aria-label={`${buttonText}: ${product.title}`}
+                    aria-label={`${product.buttonText || buttonText}: ${product.title}`}
                     className="ggg-lineup-button"
                     href={product.href}
                   >
-                    {buttonText}
+                    {product.buttonText || buttonText}
                   </Link>
                 </div>
               </article>

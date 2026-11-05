@@ -25,6 +25,13 @@ import {
   BrandValues,
   brandDefaults,
 } from '@/vibes/soul/sections/ggg-storefront';
+import {
+  AboutCommunity,
+  AboutEliteDefense,
+  AboutIntroduction,
+  AboutManufacturing,
+  aboutDefaults,
+} from '@/vibes/soul/sections/ggg-storefront/about';
 import { CategoryHero, CategoryBasicsBanner } from '@/vibes/soul/sections/ggg-storefront/category';
 import { runtime } from '~/lib/makeswift/runtime';
 
@@ -177,10 +184,11 @@ runtime.registerComponent(MSRangeDayLineup, {
     description: paragraph('Subtitle', 'Three calibers. One bold brand.'),
     buttonText: text('Product button label', 'View Ammo'),
     selectedProducts: List({
-      label: 'Product cards (empty uses the three launch calibers)',
+      label: 'Product cards (empty uses ammo and IceShaker lineup)',
       type: Group({
         label: 'Product card',
         props: {
+          buttonText: text('Button label (blank uses section label)', ''),
           displayName: text('Display heading (blank uses catalog name)', ''),
           entityId: Combobox({
             label: 'BigCommerce product',
@@ -398,5 +406,72 @@ runtime.registerComponent(MSApparelCollection, {
     ),
     eyebrow: text('Eyebrow', 'Three pieces. All you.'),
     showAllLink: Checkbox({ label: 'Show collection link', defaultValue: false }),
+  },
+});
+
+runtime.registerComponent(AboutIntroduction, {
+  type: 'ggg-about-introduction',
+  label: '3G / About introduction',
+  props: {
+    className: style(),
+    eyebrow: text('Section label', aboutDefaults.eyebrow),
+    title: paragraph('Heading', aboutDefaults.title),
+    highlight: paragraph('Coral heading', aboutDefaults.highlight),
+    description: paragraph('Introduction', aboutDefaults.introduction),
+    image: Image({ label: 'Range portrait' }),
+    imageAlt: text(
+      'Image description',
+      'Two women wearing purple range gear, safety glasses, and hearing protection at an outdoor shooting range',
+    ),
+  },
+});
+
+runtime.registerComponent(AboutEliteDefense, {
+  type: 'ggg-about-defense',
+  label: '3G / About Elite Defense',
+  props: {
+    className: style(),
+    title: text('Heading', aboutDefaults.defenseTitle),
+    description: paragraph('Body', aboutDefaults.defense),
+    image: Image({ label: 'Elite Defense artwork' }),
+    imageAlt: text(
+      'Image description',
+      'Give Girls Guns Elite Defense ammunition boxes and hollow-point cartridges on lavender podiums',
+    ),
+  },
+});
+
+runtime.registerComponent(AboutManufacturing, {
+  type: 'ggg-about-manufacturing',
+  label: '3G / About manufacturing',
+  props: {
+    className: style(),
+    title: text('Heading', aboutDefaults.manufacturingTitle),
+    highlight: text('Coral heading', aboutDefaults.manufacturingHighlight),
+    description: paragraph('Body', aboutDefaults.manufacturing),
+    statistics: List({
+      label: 'Manufacturing statistics',
+      type: Group({
+        label: 'Statistic',
+        props: { title: text('Heading', ''), description: paragraph('Description', '') },
+      }),
+      getItemLabel: (statistic) => statistic?.title || 'Statistic',
+    }),
+  },
+});
+
+runtime.registerComponent(AboutCommunity, {
+  type: 'ggg-about-community',
+  label: '3G / About community invitation',
+  props: {
+    className: style(),
+    title: text('Heading', aboutDefaults.communityTitle),
+    description: paragraph('Body', aboutDefaults.community),
+    shopLabel: text('Shop button', 'Shop Elite Defense'),
+    shopLink: Link({ label: 'Shop destination (defaults to shop)' }),
+    communityLabel: text('Community button', 'Join the Community'),
+    communityLink: Link({ label: 'Community destination (defaults to newsletter)' }),
+    socialLabel: text('Social link', 'Follow Along'),
+    socialLink: Link({ label: 'Social destination (defaults to existing Instagram)' }),
   },
 });

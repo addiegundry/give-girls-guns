@@ -94,6 +94,7 @@ export function BrandNewsletter({
       aria-label={title.trim() ? undefined : 'Newsletter signup'}
       aria-labelledby={title.trim() ? headingId : undefined}
       className={`ggg-landing-newsletter ${className ?? ''}`}
+      id="ggg-newsletter"
     >
       <div className={`ggg-landing-newsletter-inner ${hasCopy ? '' : 'ggg-newsletter-form-only'}`}>
         {hasCopy && (

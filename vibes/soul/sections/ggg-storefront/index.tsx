@@ -11,7 +11,7 @@ import { Link } from '~/components/link';
 import { useRouter } from '~/i18n/routing';
 
 export const brandDefaults = {
-  heroTitle: 'Your next\nrange day\nstarts here.',
+  heroTitle: "We're Not\nEmpowered.\nWe're Locked\n& Loaded",
   heroDescription: 'Meet the Give Girls Guns ammo lineup.',
   bannerFirst: 'FIND YOUR CALIBER',
   bannerSecond: 'MAKE IT A RANGE DAY',
